@@ -1,5 +1,6 @@
 package com.example.fergie.timetable.Adapters;
 
+import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
@@ -13,12 +14,14 @@ import java.util.ArrayList;
 public class MyPagerAdapter extends FragmentPagerAdapter
 {
 
-    ArrayList <Fragment> fragmentList;
+    private ArrayList<Fragment> fragmentList;
+    private ArrayList<String> tabTitles;
 
     public MyPagerAdapter(FragmentManager fm)
     {
         super(fm);
         fragmentList = new ArrayList<>();
+        tabTitles = new ArrayList<>();
     }
 
     @Override
@@ -32,4 +35,18 @@ public class MyPagerAdapter extends FragmentPagerAdapter
     {
         return fragmentList.size();
     }
+
+    @Nullable
+    @Override
+    public CharSequence getPageTitle(int position)
+    {
+        return tabTitles.get(position);
+    }
+
+    public void addFragment(Fragment fragment, String title)
+    {
+        fragmentList.add(fragment);
+        tabTitles.add(title);
+    }
+
 }
