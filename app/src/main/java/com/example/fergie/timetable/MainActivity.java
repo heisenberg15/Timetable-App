@@ -1,20 +1,23 @@
 package com.example.fergie.timetable;
 
 import android.os.Bundle;
+import android.support.design.widget.CoordinatorLayout;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.view.View;
 
 import com.example.fergie.timetable.Adapters.MyPagerAdapter;
 import com.example.fergie.timetable.Fragments.FriFragment;
 import com.example.fergie.timetable.Fragments.MonFragment;
+import com.example.fergie.timetable.Fragments.SatFragment;
+import com.example.fergie.timetable.Fragments.SunFragment;
 import com.example.fergie.timetable.Fragments.ThuFragment;
 import com.example.fergie.timetable.Fragments.TueFragment;
 import com.example.fergie.timetable.Fragments.WedFragment;
-
-import static android.support.design.widget.TabLayout.MODE_FIXED;
-import static android.support.design.widget.TabLayout.MODE_SCROLLABLE;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -22,6 +25,8 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
+    FloatingActionButton fab;
+    CoordinatorLayout coordinatorLayout;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -32,6 +37,8 @@ public class MainActivity extends AppCompatActivity
         toolbar = findViewById(R.id.toolbar_id);
         tabLayout = findViewById(R.id.tablayout_id);
         viewPager = findViewById(R.id.viewpager_id);
+        fab = findViewById(R.id.fab_id);
+        coordinatorLayout = findViewById(R.id.coordinator_id);
 
 
         setSupportActionBar(toolbar);
@@ -40,6 +47,7 @@ public class MainActivity extends AppCompatActivity
 
         initTabs();
 
+        fabAnimation();
     }
 
 
@@ -51,6 +59,8 @@ public class MainActivity extends AppCompatActivity
         WedFragment wedFragment = new WedFragment();
         ThuFragment thuFragment = new ThuFragment();
         FriFragment friFragment = new FriFragment();
+        SatFragment satFragment = new SatFragment();
+        SunFragment sunFragment = new SunFragment();
 
         MyPagerAdapter myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         myPagerAdapter.addFragment(monFragment, "Mon");
@@ -58,6 +68,8 @@ public class MainActivity extends AppCompatActivity
         myPagerAdapter.addFragment(wedFragment, "Wed");
         myPagerAdapter.addFragment(thuFragment, "Thu");
         myPagerAdapter.addFragment(friFragment, "Fri");
+        myPagerAdapter.addFragment(satFragment, "Sat");
+        myPagerAdapter.addFragment(sunFragment, "Sun");
 
         viewPager.setAdapter(myPagerAdapter);
     }
@@ -65,6 +77,37 @@ public class MainActivity extends AppCompatActivity
     private void initTabs()
     {
         tabLayout.setupWithViewPager(viewPager);
+    }
+
+
+    // Floating action button animation on fragment change
+    private void fabAnimation()
+    {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+                switch (state){
+                    case ViewPager.SCROLL_STATE_IDLE:
+                        fab.show();
+                        break;
+                    case ViewPager.SCROLL_STATE_DRAGGING:
+                    case ViewPager.SCROLL_STATE_SETTLING:
+                        fab.hide();
+                        break;
+                }
+
+            }
+        });
     }
 
 }
