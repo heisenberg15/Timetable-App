@@ -9,6 +9,7 @@ import android.support.design.widget.TabLayout;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 
 import com.example.fergie.timetable.Adapters.MyPagerAdapter;
@@ -27,6 +28,7 @@ public class MainActivity extends AppCompatActivity
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private FloatingActionButton fab;
+    public String check;
     CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -51,6 +53,12 @@ public class MainActivity extends AppCompatActivity
         fabAnimation();
 
         clickFab();
+
+
+        check = getIntent().getStringExtra("NAME");
+
+        Log.i("test", "onCreate: " + check);
+
     }
 
 
