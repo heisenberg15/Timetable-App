@@ -1,5 +1,6 @@
 package com.example.fergie.timetable;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -25,7 +26,7 @@ public class MainActivity extends AppCompatActivity
     private Toolbar toolbar;
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    FloatingActionButton fab;
+    private FloatingActionButton fab;
     CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -48,6 +49,8 @@ public class MainActivity extends AppCompatActivity
         initTabs();
 
         fabAnimation();
+
+        clickFab();
     }
 
 
@@ -106,6 +109,18 @@ public class MainActivity extends AppCompatActivity
                         break;
                 }
 
+            }
+        });
+    }
+
+    private void clickFab() {
+        fab.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Intent createSubjectIntent = new Intent(getApplicationContext(), CreateSubjectActivity.class);
+                startActivity(createSubjectIntent);
             }
         });
     }

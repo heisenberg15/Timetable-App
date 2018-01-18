@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">Timetable</string>
+    <string name="create_subject_activity_title">Create subject</string>
 </resources>
