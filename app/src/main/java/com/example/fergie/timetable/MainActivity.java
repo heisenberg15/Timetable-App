@@ -20,6 +20,7 @@ import com.example.fergie.timetable.Fragments.SunFragment;
 import com.example.fergie.timetable.Fragments.ThuFragment;
 import com.example.fergie.timetable.Fragments.TueFragment;
 import com.example.fergie.timetable.Fragments.WedFragment;
+import com.example.fergie.timetable.Models.SubjectModel;
 
 public class MainActivity extends AppCompatActivity
 {
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity
     private ViewPager viewPager;
     private FloatingActionButton fab;
     public String check;
+    MonFragment monFragment;
+    public SubjectModel subjectModel;
     CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -42,6 +45,7 @@ public class MainActivity extends AppCompatActivity
         viewPager = findViewById(R.id.viewpager_id);
         fab = findViewById(R.id.fab_id);
         coordinatorLayout = findViewById(R.id.coordinator_id);
+        monFragment = new MonFragment();
 
 
         setSupportActionBar(toolbar);
@@ -54,8 +58,19 @@ public class MainActivity extends AppCompatActivity
 
         clickFab();
 
+        Intent intent = getIntent();
 
-        check = getIntent().getStringExtra("NAME");
+        Bundle bundle = intent.getBundleExtra("Bundle");
+        if (bundle != null)
+        {
+            subjectModel = (SubjectModel) bundle.getSerializable("SUBJECT");
+//            monFragment.setArguments(bundle);
+            monFragment.createSubject();
+        }
+
+
+
+        check = "jaslkdjfalskdfj";
 
         Log.i("test", "onCreate: " + check);
 
@@ -94,20 +109,24 @@ public class MainActivity extends AppCompatActivity
     // Floating action button animation on fragment change
     private void fabAnimation()
     {
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
+        {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
+            {
 
             }
 
             @Override
-            public void onPageSelected(int position) {
+            public void onPageSelected(int position)
+            {
 
             }
 
             @Override
-            public void onPageScrollStateChanged(int state) {
-                switch (state){
+            public void onPageScrollStateChanged(int state)
+            {
+                switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE:
                         fab.show();
                         break;
@@ -121,7 +140,8 @@ public class MainActivity extends AppCompatActivity
         });
     }
 
-    private void clickFab() {
+    private void clickFab()
+    {
         fab.setOnClickListener(new View.OnClickListener()
         {
             @Override

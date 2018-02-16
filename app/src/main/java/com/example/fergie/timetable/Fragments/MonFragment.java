@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 
 import com.example.fergie.timetable.Adapters.RecyclerAdapter;
 import com.example.fergie.timetable.MainActivity;
+import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
 
 import java.util.ArrayList;
@@ -26,6 +27,10 @@ import static android.content.ContentValues.TAG;
 public class MonFragment extends Fragment
 {
 
+    SubjectModel subjectModel;
+    ArrayList<SubjectModel> subjectModelList;
+    RecyclerView recyclerView;
+    MainActivity mainActivity;
 
     @Nullable
     @Override
@@ -33,33 +38,44 @@ public class MonFragment extends Fragment
     {
         View fragmentView = inflater.inflate(R.layout.fragment_monday, container, false);
 
-        RecyclerView recyclerView = fragmentView.findViewById(R.id.mon_recycler_view_id);
+        recyclerView = fragmentView.findViewById(R.id.mon_recycler_view_id);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
 
-        MainActivity mainActivity = (MainActivity) getActivity();
+//        mainActivity = (MainActivity) getActivity();
 
 
-        ArrayList<String> list = new ArrayList<>();
+//        ArrayList<String> list = new ArrayList<>();
+//        Log.i(TAG, "fragment: " + mainActivity.check);
 
-        Log.i(TAG, "fragment: " + mainActivity.check);
-
-        list.add(mainActivity.check);
-        list.add("lakfajs");
-        list.add("gsdg");
-        list.add("nnghjg");
-        list.add("bnmbm");
-        list.add("okop");
-        list.add("okop");
-
-
-
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(list);
-        recyclerView.setAdapter(recyclerAdapter);
-
+        subjectModelList = new ArrayList<>();
 
 
         return fragmentView;
+    }
+
+
+    @Override
+    public void onActivityCreated(@Nullable Bundle savedInstanceState)
+    {
+        createSubject();
+        super.onActivityCreated(savedInstanceState);
+    }
+
+    public void createSubject()
+    {
+        mainActivity = (MainActivity) getActivity();
+//        Bundle bundle = this.getArguments();
+        assert mainActivity != null;
+            if (mainActivity.subjectModel != null) {
+            subjectModel = mainActivity.subjectModel;
+            subjectModelList.add(subjectModel);
+
+            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(subjectModelList);
+            recyclerView.setAdapter(recyclerAdapter);
+        }
+
+        Log.i(TAG, "fragment: " + mainActivity.check);
     }
 
 }

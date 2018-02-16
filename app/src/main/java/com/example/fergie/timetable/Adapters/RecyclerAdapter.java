@@ -6,10 +6,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
 
 import java.util.ArrayList;
-import java.util.zip.Inflater;
 
 /**
  * Created by Fergie on 1/18/2018.
@@ -17,9 +17,9 @@ import java.util.zip.Inflater;
 
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>
 {
-    ArrayList<String> list;
+    private ArrayList<SubjectModel> list;
 
-    public RecyclerAdapter(ArrayList<String> list)
+    public RecyclerAdapter(ArrayList<SubjectModel> list)
     {
         this.list = list;
     }
@@ -37,7 +37,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, int position)
     {
-        holder.textView.setText(list.get(position));
+//        SubjectModel subjectModel = list.get(position);
+        holder.subject.setText(list.get(position).getSubject());
+        holder.info.setText(list.get(position).getInfo());
+        holder.startTime.setText(list.get(position).getStartTime());
+        holder.endTime.setText(list.get(position).getEndTIme());
+        holder.color.setText(list.get(position).getColor());
     }
 
     @Override
@@ -50,13 +55,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder
     {
 
-        TextView textView;
+        TextView subject, info, startTime, endTime, color;
 
         public ViewHolder(View itemView)
         {
             super(itemView);
 
-            textView = itemView.findViewById(R.id.test_id);
+            subject = itemView.findViewById(R.id.subject_id);
+            info = itemView.findViewById(R.id.info_id);
+            startTime = itemView.findViewById(R.id.show_start_time);
+            endTime = itemView.findViewById(R.id.show_end_time);
+            color = itemView.findViewById(R.id.show_color_id);
+
         }
     }
 }
