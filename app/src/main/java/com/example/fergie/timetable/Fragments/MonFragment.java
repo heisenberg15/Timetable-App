@@ -1,6 +1,7 @@
 package com.example.fergie.timetable.Fragments;
 
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -27,10 +28,8 @@ import static android.content.ContentValues.TAG;
 public class MonFragment extends Fragment
 {
 
-    SubjectModel subjectModel;
-    ArrayList<SubjectModel> subjectModelList;
+
     RecyclerView recyclerView;
-    MainActivity mainActivity;
 
     @Nullable
     @Override
@@ -38,44 +37,36 @@ public class MonFragment extends Fragment
     {
         View fragmentView = inflater.inflate(R.layout.fragment_monday, container, false);
 
-        recyclerView = fragmentView.findViewById(R.id.mon_recycler_view_id);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
-        recyclerView.setLayoutManager(linearLayoutManager);
-
-//        mainActivity = (MainActivity) getActivity();
-
-
-//        ArrayList<String> list = new ArrayList<>();
-//        Log.i(TAG, "fragment: " + mainActivity.check);
-
-        subjectModelList = new ArrayList<>();
-
-
         return fragmentView;
     }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
-        createSubject();
         super.onActivityCreated(savedInstanceState);
+
+        recyclerView =getActivity().findViewById(R.id.mon_recycler_view_id);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(linearLayoutManager);
     }
 
-    public void createSubject()
+    public void createSubject(SubjectModel subjectModel)
     {
-        mainActivity = (MainActivity) getActivity();
-//        Bundle bundle = this.getArguments();
-        assert mainActivity != null;
-            if (mainActivity.subjectModel != null) {
-            subjectModel = mainActivity.subjectModel;
-            subjectModelList.add(subjectModel);
 
-            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(subjectModelList);
-            recyclerView.setAdapter(recyclerAdapter);
-        }
+        ArrayList<SubjectModel> subjectModelList = new ArrayList<>();
+        subjectModelList.add(subjectModel);
 
-        Log.i(TAG, "fragment: " + mainActivity.check);
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(subjectModelList);
+        recyclerView.setAdapter(recyclerAdapter);
+
+
+//        Log.i(TAG, "fragment: " + mainActivity.check);
     }
 
 }
+
+
+
+
+
+

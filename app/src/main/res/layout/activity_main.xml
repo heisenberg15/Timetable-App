@@ -9,6 +9,11 @@
     tools:context="com.example.fergie.timetable.MainActivity">
 
 
+    <FrameLayout
+        android:id="@+id/fragment_container_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar_id"
         android:layout_width="match_parent"
@@ -31,6 +36,7 @@
             app:tabMode="scrollable" />
 
     </android.support.design.widget.AppBarLayout>
+
 
 
     <android.support.v4.view.ViewPager

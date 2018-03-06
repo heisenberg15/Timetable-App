@@ -2,17 +2,21 @@ package com.example.fergie.timetable;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.View;
+import android.widget.FrameLayout;
 
 import com.example.fergie.timetable.Adapters.MyPagerAdapter;
+import com.example.fergie.timetable.Fragments.CreateSubjFragment;
 import com.example.fergie.timetable.Fragments.FriFragment;
 import com.example.fergie.timetable.Fragments.MonFragment;
 import com.example.fergie.timetable.Fragments.SatFragment;
@@ -22,7 +26,7 @@ import com.example.fergie.timetable.Fragments.TueFragment;
 import com.example.fergie.timetable.Fragments.WedFragment;
 import com.example.fergie.timetable.Models.SubjectModel;
 
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends AppCompatActivity implements Communicator
 {
 
     private Toolbar toolbar;
@@ -30,8 +34,10 @@ public class MainActivity extends AppCompatActivity
     private ViewPager viewPager;
     private FloatingActionButton fab;
     public String check;
-    MonFragment monFragment;
     public SubjectModel subjectModel;
+    public CreateSubjFragment createSubjFragment;
+    FrameLayout frameLayout;
+    ConstraintLayout constraintLayout;
     CoordinatorLayout coordinatorLayout;
 
     @Override
@@ -45,8 +51,9 @@ public class MainActivity extends AppCompatActivity
         viewPager = findViewById(R.id.viewpager_id);
         fab = findViewById(R.id.fab_id);
         coordinatorLayout = findViewById(R.id.coordinator_id);
-        monFragment = new MonFragment();
-
+        createSubjFragment = new CreateSubjFragment();
+        frameLayout = findViewById(R.id.fragment_container_id);
+        constraintLayout = findViewById(R.id.create_subject_fragment);
 
         setSupportActionBar(toolbar);
 
@@ -58,19 +65,6 @@ public class MainActivity extends AppCompatActivity
 
         clickFab();
 
-        Intent intent = getIntent();
-
-        Bundle bundle = intent.getBundleExtra("Bundle");
-        if (bundle != null)
-        {
-            subjectModel = (SubjectModel) bundle.getSerializable("SUBJECT");
-//            monFragment.setArguments(bundle);
-            monFragment.createSubject();
-        }
-
-
-
-        check = "jaslkdjfalskdfj";
 
         Log.i("test", "onCreate: " + check);
 
@@ -147,10 +141,21 @@ public class MainActivity extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                Intent createSubjectIntent = new Intent(getApplicationContext(), CreateSubjectActivity.class);
-                startActivity(createSubjectIntent);
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container_id, createSubjFragment, createSubjFragment.getTag())
+                        .setTransitionStyle(FragmentTransaction.TRANSIT_ENTER_MASK)
+                        .commit();
+
+                frameLayout.bringToFront();
             }
         });
     }
 
+    @Override
+    public void respond(SubjectModel subjectModel)
+    {
+        MonFragment fragment = (MonFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager_id + ":" + viewPager.getCurrentItem());
+        fragment.createSubject(subjectModel);
+    }
 }
