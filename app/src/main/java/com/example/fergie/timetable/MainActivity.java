@@ -7,6 +7,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -179,8 +180,26 @@ public class MainActivity extends AppCompatActivity implements Communicator
         tabLayout.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
 
-        MonFragment fragment = (MonFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager_id + ":" + viewPager.getCurrentItem());
-        fragment.createSubject(subjectModel);
+        Fragment fragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager_id + ":" + viewPager.getCurrentItem());
+
+        if (viewPager.getCurrentItem() == 0 && fragment != null){
+            ((MonFragment)fragment).createSubject(subjectModel);
+        } else if (viewPager.getCurrentItem() == 1 && fragment != null){
+            ((TueFragment)fragment).createSubject(subjectModel);
+        }
 
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+

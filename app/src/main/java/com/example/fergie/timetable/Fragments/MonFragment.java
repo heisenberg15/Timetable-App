@@ -57,9 +57,9 @@ public class MonFragment extends Fragment
 //        ArrayList<SubjectModel> subjectModelList = new ArrayList<>();
 //        subjectModelList.add(subjectModel);
 
-        Singleton.getInstance().addSubject(subjectModel);
+        Singleton.getInstance().addMonSubject(subjectModel);
 
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(Singleton.getInstance().getList());
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(Singleton.getInstance().getMonList());
         recyclerView.setAdapter(recyclerAdapter);
 
 

@@ -8,7 +8,8 @@ import java.util.HashMap;
 public class Singleton
 {
     private static Singleton uniqueInstance;
-    private static ArrayList<SubjectModel> list;
+    private static ArrayList<SubjectModel> monlist;
+    private static ArrayList<SubjectModel> tuelist;
 
     private Singleton()
     {
@@ -18,18 +19,30 @@ public class Singleton
     {
         if (uniqueInstance == null) {
             uniqueInstance = new Singleton();
-            list = new ArrayList<>();
+            monlist = new ArrayList<>();
+            tuelist = new ArrayList<>();
         }
         return uniqueInstance;
     }
 
-    public void addSubject(SubjectModel subjectModel)
+    public void addMonSubject(SubjectModel subjectModel)
     {
-        list.add(subjectModel);
+        monlist.add(subjectModel);
     }
 
-    public ArrayList<SubjectModel> getList()
+
+    public void addTueSubject(SubjectModel subjectModel)
     {
-        return list;
+        tuelist.add(subjectModel);
+    }
+
+    public ArrayList<SubjectModel> getMonList()
+    {
+        return monlist;
+    }
+
+    public ArrayList<SubjectModel> getTueList()
+    {
+        return tuelist;
     }
 }
