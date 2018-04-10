@@ -72,6 +72,7 @@ public class CreateSubjFragment extends Fragment
 
                 comm.respond(subjectModel);
 
+                getActivity().onBackPressed();
             }
         });
     }

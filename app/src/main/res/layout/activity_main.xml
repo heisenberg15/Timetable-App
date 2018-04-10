@@ -5,14 +5,8 @@
     android:id="@+id/coordinator_id"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
     tools:context="com.example.fergie.timetable.MainActivity">
 
-
-    <FrameLayout
-        android:id="@+id/fragment_container_id"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"/>
 
     <android.support.design.widget.AppBarLayout
         android:id="@+id/appbar_id"
@@ -37,7 +31,12 @@
 
     </android.support.design.widget.AppBarLayout>
 
-
+    <FrameLayout
+        android:id="@+id/fragment_container_id"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        app:elevation="2dp"
+        app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager_id"
@@ -50,15 +49,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
-        android:layout_marginBottom="16dp"
-        android:layout_marginEnd="16dp"
-        android:layout_marginRight="16dp"
-        app:srcCompat="@drawable/ic_add_white_24px"
-        app:elevation="4dp"
+        android:layout_margin="16dp"
         android:clickable="true"
         android:focusable="true"
         app:layout_anchor="@id/viewpager_id"
         app:layout_anchorGravity="bottom|right|end"
+        app:srcCompat="@drawable/ic_add_white_24px"
         tools:ignore="VectorDrawableCompat" />
 
 

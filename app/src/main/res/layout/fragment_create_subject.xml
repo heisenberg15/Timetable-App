@@ -1,9 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
     android:id="@+id/create_subject_fragment"
-    android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:clickable="true"
+    android:background="@android:color/white">
 
 
     <EditText
@@ -45,21 +47,24 @@
     <TextView
         android:id="@+id/choose_color_id"
         android:layout_width="wrap_content"
-        android:textSize="20sp"
-        android:text="Blue"
-        app:layout_constraintTop_toBottomOf="@id/end_time_id"
+        android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:layout_height="wrap_content" />
+        android:text="Blue"
+        android:textSize="20sp"
+        app:layout_constraintTop_toBottomOf="@id/end_time_id" />
 
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/save_subject_fab_id"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_marginRight="54dp"
-        android:src="@drawable/ic_done_white_24px"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        android:layout_height="wrap_content"
+        android:layout_margin="16dp"
+        android:clickable="true"
+        android:focusable="true"
+        app:elevation="4dp"
+        android:src="@drawable/ic_done_white_24px"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
 
 
 </android.support.constraint.ConstraintLayout>

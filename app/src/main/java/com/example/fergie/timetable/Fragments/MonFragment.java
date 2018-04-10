@@ -15,6 +15,7 @@ import com.example.fergie.timetable.Adapters.RecyclerAdapter;
 import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
+import com.example.fergie.timetable.Utils.Singleton;
 
 import java.util.ArrayList;
 import java.util.zip.Inflater;
@@ -53,10 +54,12 @@ public class MonFragment extends Fragment
     public void createSubject(SubjectModel subjectModel)
     {
 
-        ArrayList<SubjectModel> subjectModelList = new ArrayList<>();
-        subjectModelList.add(subjectModel);
+//        ArrayList<SubjectModel> subjectModelList = new ArrayList<>();
+//        subjectModelList.add(subjectModel);
 
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(subjectModelList);
+        Singleton.getInstance().addSubject(subjectModel);
+
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(Singleton.getInstance().getList());
         recyclerView.setAdapter(recyclerAdapter);
 
 

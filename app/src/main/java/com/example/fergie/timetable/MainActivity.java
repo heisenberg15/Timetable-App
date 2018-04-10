@@ -26,6 +26,8 @@ import com.example.fergie.timetable.Fragments.TueFragment;
 import com.example.fergie.timetable.Fragments.WedFragment;
 import com.example.fergie.timetable.Models.SubjectModel;
 
+import java.io.FileReader;
+
 public class MainActivity extends AppCompatActivity implements Communicator
 {
 
@@ -45,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
 
         toolbar = findViewById(R.id.toolbar_id);
         tabLayout = findViewById(R.id.tablayout_id);
@@ -68,8 +71,18 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
         Log.i("test", "onCreate: " + check);
 
+
+
     }
 
+    @Override
+    public void onBackPressed()
+    {
+        super.onBackPressed();
+        toolbar.setVisibility(View.VISIBLE);
+        tabLayout.setVisibility(View.VISIBLE);
+        fab.setVisibility(View.VISIBLE);
+    }
 
     // Fill pagerAdapter with Fragments and Titles
     private void fillPages()
@@ -141,10 +154,17 @@ public class MainActivity extends AppCompatActivity implements Communicator
             @Override
             public void onClick(View v)
             {
+
+                fab.setVisibility(View.GONE);
+
+                toolbar.setVisibility(View.GONE);
+                tabLayout.setVisibility(View.GONE);
+
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container_id, createSubjFragment, createSubjFragment.getTag())
-                        .setTransitionStyle(FragmentTransaction.TRANSIT_ENTER_MASK)
+                        .addToBackStack("tag")
+                        .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
                         .commit();
 
                 frameLayout.bringToFront();
@@ -155,7 +175,12 @@ public class MainActivity extends AppCompatActivity implements Communicator
     @Override
     public void respond(SubjectModel subjectModel)
     {
+        toolbar.setVisibility(View.VISIBLE);
+        tabLayout.setVisibility(View.VISIBLE);
+        fab.setVisibility(View.VISIBLE);
+
         MonFragment fragment = (MonFragment) getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager_id + ":" + viewPager.getCurrentItem());
         fragment.createSubject(subjectModel);
+
     }
 }
