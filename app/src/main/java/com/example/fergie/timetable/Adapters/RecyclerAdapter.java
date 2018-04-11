@@ -1,10 +1,13 @@
 package com.example.fergie.timetable.Adapters;
 
+import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
@@ -18,9 +21,11 @@ import java.util.ArrayList;
 public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHolder>
 {
     private ArrayList<SubjectModel> list;
+    private Context context;
 
-    public RecyclerAdapter(ArrayList<SubjectModel> list)
+    public RecyclerAdapter(Context context ,ArrayList<SubjectModel> list)
     {
+        this.context = context;
         this.list = list;
     }
 
@@ -35,7 +40,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, int position)
+    public void onBindViewHolder(ViewHolder holder, final int position)
     {
 //        SubjectModel subjectModel = list.get(position);
         holder.subject.setText(list.get(position).getSubject());
@@ -43,6 +48,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.startTime.setText(list.get(position).getStartTime());
         holder.endTime.setText(list.get(position).getEndTIme());
         holder.color.setText(list.get(position).getColor());
+
+        holder.parentLayout.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Toast.makeText(context, list.get(position).getSubject(), Toast.LENGTH_LONG).show();
+            }
+        });
+
     }
 
     @Override
@@ -56,6 +71,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     {
 
         TextView subject, info, startTime, endTime, color;
+        LinearLayout parentLayout;
 
         public ViewHolder(View itemView)
         {
@@ -66,7 +82,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             startTime = itemView.findViewById(R.id.show_start_time);
             endTime = itemView.findViewById(R.id.show_end_time);
             color = itemView.findViewById(R.id.show_color_id);
-
+            parentLayout = itemView.findViewById(R.id.recycler_item_id);
         }
     }
 }

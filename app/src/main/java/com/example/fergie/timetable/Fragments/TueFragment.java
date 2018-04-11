@@ -46,7 +46,7 @@ public class TueFragment extends Fragment
 
         Singleton.getInstance().addTueSubject(subjectModel);
 
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(Singleton.getInstance().getTueList());
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext() ,Singleton.getInstance().getTueList());
         recyclerView.setAdapter(recyclerAdapter);
 
     }

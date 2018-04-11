@@ -26,6 +26,7 @@ import com.example.fergie.timetable.Fragments.ThuFragment;
 import com.example.fergie.timetable.Fragments.TueFragment;
 import com.example.fergie.timetable.Fragments.WedFragment;
 import com.example.fergie.timetable.Models.SubjectModel;
+import com.example.fergie.timetable.Utils.Singleton;
 
 import java.io.FileReader;
 
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
         frameLayout = findViewById(R.id.fragment_container_id);
         constraintLayout = findViewById(R.id.create_subject_fragment);
 
+
         setSupportActionBar(toolbar);
 
         fillPages();
@@ -70,8 +72,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
         clickFab();
 
 
-        Log.i("test", "onCreate: " + check);
-
+        viewPager.setOffscreenPageLimit(7);
 
 
     }
@@ -189,6 +190,10 @@ public class MainActivity extends AppCompatActivity implements Communicator
         }
 
     }
+
+
+
+
 }
 
 

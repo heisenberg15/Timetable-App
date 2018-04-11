@@ -59,7 +59,7 @@ public class MonFragment extends Fragment
 
         Singleton.getInstance().addMonSubject(subjectModel);
 
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(Singleton.getInstance().getMonList());
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext() ,Singleton.getInstance().getMonList());
         recyclerView.setAdapter(recyclerAdapter);
 
 
