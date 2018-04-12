@@ -1,26 +1,21 @@
 package com.example.fergie.timetable.Fragments;
 
+import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.fergie.timetable.Adapters.RecyclerAdapter;
-import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
 import com.example.fergie.timetable.Utils.Singleton;
 
-import java.util.ArrayList;
-import java.util.zip.Inflater;
-
-import static android.content.ContentValues.TAG;
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by Fergie on 1/9/2018.
@@ -46,24 +41,29 @@ public class MonFragment extends Fragment
     {
         super.onActivityCreated(savedInstanceState);
 
-        recyclerView =getActivity().findViewById(R.id.mon_recycler_view_id);
+        recyclerView = getActivity().findViewById(R.id.mon_recycler_view_id);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
+
+        updateSubjectList();
     }
 
     public void createSubject(SubjectModel subjectModel)
     {
-
-//        ArrayList<SubjectModel> subjectModelList = new ArrayList<>();
-//        subjectModelList.add(subjectModel);
-
         Singleton.getInstance().addMonSubject(subjectModel);
 
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext() ,Singleton.getInstance().getMonList());
+        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), Singleton.getInstance().getMonList());
         recyclerView.setAdapter(recyclerAdapter);
+    }
 
+    private void updateSubjectList()
+    {
+        SharedPreferences saveSingleton = getActivity().getSharedPreferences("saveSingleton", MODE_PRIVATE);
 
-//        Log.i(TAG, "fragment: " + mainActivity.check);
+        if (saveSingleton.getString("mondayList", null) != null) {
+            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), Singleton.getInstance().getMonList());
+            recyclerView.setAdapter(recyclerAdapter);
+        }
     }
 
 }
