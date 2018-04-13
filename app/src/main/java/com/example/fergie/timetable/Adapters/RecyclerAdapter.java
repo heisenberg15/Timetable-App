@@ -23,7 +23,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private ArrayList<SubjectModel> list;
     private Context context;
 
-    public RecyclerAdapter(Context context ,ArrayList<SubjectModel> list)
+    public RecyclerAdapter(Context context, ArrayList<SubjectModel> list)
     {
         this.context = context;
         this.list = list;
@@ -54,7 +54,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             @Override
             public void onClick(View v)
             {
-                Toast.makeText(context, list.get(position).getSubject(), Toast.LENGTH_LONG).show();
+//                Toast.makeText(context, list.get(position).getSubject(), Toast.LENGTH_LONG).show();
+
+                list.remove(position);
+                notifyItemRemoved(position);
+                notifyItemRangeChanged(position, list.size());
+
             }
         });
 
