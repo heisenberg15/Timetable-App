@@ -1,19 +1,16 @@
 package com.example.fergie.timetable;
 
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.widget.FrameLayout;
 
@@ -29,10 +26,6 @@ import com.example.fergie.timetable.Fragments.WedFragment;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.Utils.Singleton;
 import com.google.gson.Gson;
-import com.google.gson.reflect.TypeToken;
-
-import java.io.FileReader;
-import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity implements Communicator
 {
@@ -41,12 +34,12 @@ public class MainActivity extends AppCompatActivity implements Communicator
     private TabLayout tabLayout;
     private ViewPager viewPager;
     private FloatingActionButton fab;
-    public String check;
     public SubjectModel subjectModel;
     public CreateSubjFragment createSubjFragment;
     FrameLayout frameLayout;
     ConstraintLayout constraintLayout;
     CoordinatorLayout coordinatorLayout;
+    RunOneTime runOneTime;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -63,7 +56,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
         createSubjFragment = new CreateSubjFragment();
         frameLayout = findViewById(R.id.fragment_container_id);
         constraintLayout = findViewById(R.id.create_subject_fragment);
-
+        runOneTime = new RunOneTime();
 
         setSupportActionBar(toolbar);
 
@@ -75,8 +68,6 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
         clickFab();
 
-
-        retrySharedPreferences();
 
         viewPager.setOffscreenPageLimit(7);
 
@@ -92,12 +83,12 @@ public class MainActivity extends AppCompatActivity implements Communicator
         SharedPreferences.Editor editor = saveSingleton.edit();
 
         String mondayList = new Gson().toJson(Singleton.getInstance().getMonList());
-        String tuesdayList = new Gson().toJson(Singleton.getInstance().getMonList());
-        String wednesdayList = new Gson().toJson(Singleton.getInstance().getMonList());
-        String thursdayList = new Gson().toJson(Singleton.getInstance().getMonList());
-        String fridayList = new Gson().toJson(Singleton.getInstance().getMonList());
-        String saturdayList = new Gson().toJson(Singleton.getInstance().getMonList());
-        String sundayList = new Gson().toJson(Singleton.getInstance().getMonList());
+        String tuesdayList = new Gson().toJson(Singleton.getInstance().getTueList());
+        String wednesdayList = new Gson().toJson(Singleton.getInstance().getWedList());
+        String thursdayList = new Gson().toJson(Singleton.getInstance().getThuList());
+        String fridayList = new Gson().toJson(Singleton.getInstance().getFriList());
+        String saturdayList = new Gson().toJson(Singleton.getInstance().getSatList());
+        String sundayList = new Gson().toJson(Singleton.getInstance().getSunList());
 
         editor.putString("mondayList", mondayList);
         editor.putString("tuesdayList", tuesdayList);
@@ -109,99 +100,98 @@ public class MainActivity extends AppCompatActivity implements Communicator
         editor.apply();
     }
 
-
-    // retry saved subject lists in shared preferences for each day
-    private void retrySharedPreferences()
-    {
-        SharedPreferences saveSingleton = getSharedPreferences("saveSingleton", MODE_PRIVATE);
-        String mondayList = saveSingleton.getString("mondayList", null);
-        String tuesdayList = saveSingleton.getString("tuesdayList", null);
-        String wednesdayList = saveSingleton.getString("wednesdayList", null);
-        String thursdayList = saveSingleton.getString("thursdayList", null);
-        String fridayList = saveSingleton.getString("fridayList", null);
-        String saturdayList = saveSingleton.getString("saturdayList", null);
-        String sundayList = saveSingleton.getString("sundayList", null);
-
-        if (mondayList != null) {
-            ArrayList<SubjectModel> getMondayList = new Gson().fromJson(mondayList, new TypeToken<ArrayList<SubjectModel>>()
-            {
-            }.getType());
-
-            for (int i = 0; i < getMondayList.size(); i++) {
-                Singleton.getInstance().addMonSubject(getMondayList.get(i));
-            }
-        }
-
-        if (tuesdayList != null) {
-            ArrayList<SubjectModel> getTuesdayList = new Gson().fromJson(tuesdayList, new TypeToken<ArrayList<SubjectModel>>()
-            {
-            }.getType());
-
-            for (int i = 0; i < getTuesdayList.size(); i++) {
-                Singleton.getInstance().addTueSubject(getTuesdayList.get(i));
-            }
-        }
-
-        if (wednesdayList != null) {
-            ArrayList<SubjectModel> getWednesdayList = new Gson().fromJson(wednesdayList, new TypeToken<ArrayList<SubjectModel>>()
-            {
-            }.getType());
-
-            for (int i = 0; i < getWednesdayList.size(); i++) {
-                Singleton.getInstance().addWedSubject(getWednesdayList.get(i));
-            }
-        }
-
-        if (thursdayList != null) {
-            ArrayList<SubjectModel> getThursdayList = new Gson().fromJson(thursdayList, new TypeToken<ArrayList<SubjectModel>>()
-            {
-            }.getType());
-
-            for (int i = 0; i < getThursdayList.size(); i++) {
-                Singleton.getInstance().addThuSubject(getThursdayList.get(i));
-            }
-        }
-
-        if (fridayList != null) {
-            ArrayList<SubjectModel> getFridayList = new Gson().fromJson(fridayList, new TypeToken<ArrayList<SubjectModel>>()
-            {
-            }.getType());
-
-            for (int i = 0; i < getFridayList.size(); i++) {
-                Singleton.getInstance().addFriSubject(getFridayList.get(i));
-            }
-        }
-
-        if (saturdayList != null) {
-            ArrayList<SubjectModel> getSaturdayList = new Gson().fromJson(saturdayList, new TypeToken<ArrayList<SubjectModel>>()
-            {
-            }.getType());
-
-            for (int i = 0; i < getSaturdayList.size(); i++) {
-                Singleton.getInstance().addSatSubject(getSaturdayList.get(i));
-            }
-        }
-
-        if (sundayList != null) {
-            ArrayList<SubjectModel> getSundayList = new Gson().fromJson(sundayList, new TypeToken<ArrayList<SubjectModel>>()
-            {
-            }.getType());
-
-            for (int i = 0; i < getSundayList.size(); i++) {
-                Singleton.getInstance().addSunSubject(getSundayList.get(i));
-            }
-        }
-
-
-//        updateSingletonLists(mondayList);
-//        updateSingletonLists(tuesdayList);
-//        updateSingletonLists(wednesdayList);
-//        updateSingletonLists(thursdayList);
-//        updateSingletonLists(fridayList);
-//        updateSingletonLists(saturdayList);
-//        updateSingletonLists(sundayList);
-
-    }
+    // retry saved subject lists in sharedPreferences for each day
+//    private void retrySharedPreferences()
+//    {
+//        SharedPreferences saveSingleton = getSharedPreferences("saveSingleton", MODE_PRIVATE);
+//        String mondayList = saveSingleton.getString("mondayList", null);
+//        String tuesdayList = saveSingleton.getString("tuesdayList", null);
+//        String wednesdayList = saveSingleton.getString("wednesdayList", null);
+//        String thursdayList = saveSingleton.getString("thursdayList", null);
+//        String fridayList = saveSingleton.getString("fridayList", null);
+//        String saturdayList = saveSingleton.getString("saturdayList", null);
+//        String sundayList = saveSingleton.getString("sundayList", null);
+//
+//        if (mondayList != null) {
+//            ArrayList<SubjectModel> getMondayList = new Gson().fromJson(mondayList, new TypeToken<ArrayList<SubjectModel>>()
+//            {
+//            }.getType());
+//
+//            for (int i = 0; i < getMondayList.size(); i++) {
+//                Singleton.getInstance().addMonSubject(getMondayList.get(i));
+//            }
+//        }
+//
+//        if (tuesdayList != null) {
+//            ArrayList<SubjectModel> getTuesdayList = new Gson().fromJson(tuesdayList, new TypeToken<ArrayList<SubjectModel>>()
+//            {
+//            }.getType());
+//
+//            for (int i = 0; i < getTuesdayList.size(); i++) {
+//                Singleton.getInstance().addTueSubject(getTuesdayList.get(i));
+//            }
+//        }
+//
+//        if (wednesdayList != null) {
+//            ArrayList<SubjectModel> getWednesdayList = new Gson().fromJson(wednesdayList, new TypeToken<ArrayList<SubjectModel>>()
+//            {
+//            }.getType());
+//
+//            for (int i = 0; i < getWednesdayList.size(); i++) {
+//                Singleton.getInstance().addWedSubject(getWednesdayList.get(i));
+//            }
+//        }
+//
+//        if (thursdayList != null) {
+//            ArrayList<SubjectModel> getThursdayList = new Gson().fromJson(thursdayList, new TypeToken<ArrayList<SubjectModel>>()
+//            {
+//            }.getType());
+//
+//            for (int i = 0; i < getThursdayList.size(); i++) {
+//                Singleton.getInstance().addThuSubject(getThursdayList.get(i));
+//            }
+//        }
+//
+//        if (fridayList != null) {
+//            ArrayList<SubjectModel> getFridayList = new Gson().fromJson(fridayList, new TypeToken<ArrayList<SubjectModel>>()
+//            {
+//            }.getType());
+//
+//            for (int i = 0; i < getFridayList.size(); i++) {
+//                Singleton.getInstance().addFriSubject(getFridayList.get(i));
+//            }
+//        }
+//
+//        if (saturdayList != null) {
+//            ArrayList<SubjectModel> getSaturdayList = new Gson().fromJson(saturdayList, new TypeToken<ArrayList<SubjectModel>>()
+//            {
+//            }.getType());
+//
+//            for (int i = 0; i < getSaturdayList.size(); i++) {
+//                Singleton.getInstance().addSatSubject(getSaturdayList.get(i));
+//            }
+//        }
+//
+//        if (sundayList != null) {
+//            ArrayList<SubjectModel> getSundayList = new Gson().fromJson(sundayList, new TypeToken<ArrayList<SubjectModel>>()
+//            {
+//            }.getType());
+//
+//            for (int i = 0; i < getSundayList.size(); i++) {
+//                Singleton.getInstance().addSunSubject(getSundayList.get(i));
+//            }
+//        }
+//
+//
+////        updateSingletonLists(mondayList);
+////        updateSingletonLists(tuesdayList);
+////        updateSingletonLists(wednesdayList);
+////        updateSingletonLists(thursdayList);
+////        updateSingletonLists(fridayList);
+////        updateSingletonLists(saturdayList);
+////        updateSingletonLists(sundayList);
+//
+//    }
 
 
     @Override
@@ -349,13 +339,13 @@ public class MainActivity extends AppCompatActivity implements Communicator
 //                } else if(saveSingleton.getString("wednesdayList", null) == stringDay) {
 //                    Singleton.getInstance().addWedSubject(list.get(i));
 //                } else if(saveSingleton.getString("thursdayList", null) == stringDay) {
-//                    Singleton.getInstance().addthuSubject(list.get(i));
+//                    Singleton.getInstance().addThuSubject(list.get(i));
 //                } else if(saveSingleton.getString("fridayList", null) == stringDay) {
-//                    Singleton.getInstance().addfriSubject(list.get(i));
+//                    Singleton.getInstance().addFriSubject(list.get(i));
 //                } else if(saveSingleton.getString("saturdayList", null) == stringDay) {
-//                    Singleton.getInstance().addsatSubject(list.get(i));
+//                    Singleton.getInstance().addSatSubject(list.get(i));
 //                } else if(saveSingleton.getString("sundayList", null) == stringDay) {
-//                    Singleton.getInstance().addsunSubject(list.get(i));
+//                    Singleton.getInstance().addSunSubject(list.get(i));
 //                }
 //
 //            }
