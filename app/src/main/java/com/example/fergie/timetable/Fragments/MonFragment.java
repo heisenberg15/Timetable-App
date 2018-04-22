@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.fergie.timetable.Adapters.RecyclerAdapter;
+import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
 import com.example.fergie.timetable.Utils.Singleton;
@@ -24,8 +25,9 @@ import static android.content.Context.MODE_PRIVATE;
 public class MonFragment extends Fragment
 {
 
-
     RecyclerView recyclerView;
+    MainActivity mainActivity;
+
 
     @Nullable
     @Override
@@ -41,6 +43,8 @@ public class MonFragment extends Fragment
     {
         super.onActivityCreated(savedInstanceState);
 
+        mainActivity = (MainActivity) getActivity();
+
         recyclerView = getActivity().findViewById(R.id.mon_recycler_view_id);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -50,10 +54,18 @@ public class MonFragment extends Fragment
 
     public void createSubject(SubjectModel subjectModel)
     {
-        Singleton.getInstance().addMonSubject(subjectModel);
+        if (mainActivity.edit == 0) {
+            Singleton.getInstance().addMonSubject(subjectModel);
 
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), Singleton.getInstance().getMonList());
-        recyclerView.setAdapter(recyclerAdapter);
+            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), Singleton.getInstance().getMonList());
+            recyclerView.setAdapter(recyclerAdapter);
+        } else if (mainActivity.edit == 1) {
+            Singleton.getInstance().getMonList().set(mainActivity.position, subjectModel);
+
+            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), Singleton.getInstance().getMonList());
+            recyclerView.setAdapter(recyclerAdapter);
+            mainActivity.edit = 0;
+        }
     }
 
     private void updateSubjectList()
@@ -65,6 +77,7 @@ public class MonFragment extends Fragment
             recyclerView.setAdapter(recyclerAdapter);
         }
     }
+
 
 }
 

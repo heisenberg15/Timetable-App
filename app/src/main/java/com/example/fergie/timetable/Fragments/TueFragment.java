@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.fergie.timetable.Adapters.RecyclerAdapter;
+import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
 import com.example.fergie.timetable.Utils.Singleton;
@@ -25,6 +26,7 @@ public class TueFragment extends Fragment
 {
 
     RecyclerView recyclerView;
+    MainActivity mainActivity;
 
     @Nullable
     @Override
@@ -39,6 +41,7 @@ public class TueFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
+        mainActivity = (MainActivity) getActivity();
         recyclerView = getActivity().findViewById(R.id.tue_recycler_view_id);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -48,11 +51,18 @@ public class TueFragment extends Fragment
 
     public void createSubject(SubjectModel subjectModel)
     {
+        if (mainActivity.edit == 0) {
+            Singleton.getInstance().addTueSubject(subjectModel);
 
-        Singleton.getInstance().addTueSubject(subjectModel);
+            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), Singleton.getInstance().getTueList());
+            recyclerView.setAdapter(recyclerAdapter);
+        } else if (mainActivity.edit == 1) {
+            Singleton.getInstance().getTueList().set(mainActivity.position, subjectModel);
 
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext() ,Singleton.getInstance().getTueList());
-        recyclerView.setAdapter(recyclerAdapter);
+            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), Singleton.getInstance().getTueList());
+            recyclerView.setAdapter(recyclerAdapter);
+            mainActivity.edit = 0;
+        }
     }
 
     private void updateSubjectList()

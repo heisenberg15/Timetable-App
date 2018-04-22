@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.example.fergie.timetable.Adapters.RecyclerAdapter;
+import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
 import com.example.fergie.timetable.Utils.Singleton;
@@ -25,6 +26,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class SunFragment extends Fragment
 {
     RecyclerView recyclerView;
+    MainActivity mainActivity;
 
     @Nullable
     @Override
@@ -39,7 +41,7 @@ public class SunFragment extends Fragment
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
     {
         super.onActivityCreated(savedInstanceState);
-
+        mainActivity = (MainActivity) getActivity();
         recyclerView = getActivity().findViewById(R.id.sun_recycler_view_id);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext());
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -49,10 +51,19 @@ public class SunFragment extends Fragment
 
     public void createSubject(SubjectModel subjectModel)
     {
-        Singleton.getInstance().addSunSubject(subjectModel);
 
-        RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), Singleton.getInstance().getSunList());
-        recyclerView.setAdapter(recyclerAdapter);
+        if (mainActivity.edit == 0){
+            Singleton.getInstance().addSunSubject(subjectModel);
+
+            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), Singleton.getInstance().getSunList());
+            recyclerView.setAdapter(recyclerAdapter);
+        } else if (mainActivity.edit == 1){
+            Singleton.getInstance().getSunList().set(mainActivity.position, subjectModel);
+
+            RecyclerAdapter recyclerAdapter = new RecyclerAdapter(getContext(), Singleton.getInstance().getSunList());
+            recyclerView.setAdapter(recyclerAdapter);
+            mainActivity.edit = 0;
+        }
     }
 
     private void updateSubjectList()

@@ -1,7 +1,10 @@
 package com.example.fergie.timetable.Adapters;
 
 import android.content.Context;
+import android.os.Bundle;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,10 +12,17 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.fergie.timetable.Fragments.CreateSubjFragment;
+import com.example.fergie.timetable.Fragments.MonFragment;
+import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
+import com.example.fergie.timetable.Utils.PassSubject;
 
 import java.util.ArrayList;
+import java.util.List;
+
+import static android.content.ContentValues.TAG;
 
 /**
  * Created by Fergie on 1/18/2018.
@@ -22,6 +32,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 {
     private ArrayList<SubjectModel> list;
     private Context context;
+    private MainActivity mainActivity;
+
 
     public RecyclerAdapter(Context context, ArrayList<SubjectModel> list)
     {
@@ -42,23 +54,27 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position)
     {
-//        SubjectModel subjectModel = list.get(position);
         holder.subject.setText(list.get(position).getSubject());
         holder.info.setText(list.get(position).getInfo());
         holder.startTime.setText(list.get(position).getStartTime());
         holder.endTime.setText(list.get(position).getEndTIme());
         holder.color.setText(list.get(position).getColor());
 
+        mainActivity = (MainActivity) context;
+
+
         holder.parentLayout.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-//                Toast.makeText(context, list.get(position).getSubject(), Toast.LENGTH_LONG).show();
 
-                list.remove(position);
-                notifyItemRemoved(position);
-                notifyItemRangeChanged(position, list.size());
+//                list.remove(position);
+//                notifyItemRemoved(position);
+//                notifyItemRangeChanged(position, list.size());
+                editSubject();
+                mainActivity.position = position;
+                mainActivity.edit = 1;
 
             }
         });
@@ -72,13 +88,18 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
 
+    private void editSubject()
+    {
+        mainActivity.showCreateSubjectFragment();
+    }
+
     class ViewHolder extends RecyclerView.ViewHolder
     {
 
         TextView subject, info, startTime, endTime, color;
         LinearLayout parentLayout;
 
-        public ViewHolder(View itemView)
+        ViewHolder(View itemView)
         {
             super(itemView);
 

@@ -5,15 +5,19 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
 
+import com.example.fergie.timetable.Adapters.RecyclerAdapter;
 import com.example.fergie.timetable.Communicator;
+import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
+import com.example.fergie.timetable.Utils.PassSubject;
 
 /**
  * Created by Fergie on 2/28/2018.
@@ -56,12 +60,12 @@ public class CreateSubjFragment extends Fragment
 
     private void onSaveSubject()
     {
+
         fab.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-
                 String subject = subjectEditText.getText().toString();
                 String info = infoEditText.getText().toString();
                 String start = startTextView.getText().toString();
@@ -71,11 +75,11 @@ public class CreateSubjFragment extends Fragment
                 SubjectModel subjectModel = new SubjectModel(subject, info, start, end, color);
 
                 comm.respond(subjectModel);
-
                 getActivity().onBackPressed();
             }
         });
     }
+
 }
 
 

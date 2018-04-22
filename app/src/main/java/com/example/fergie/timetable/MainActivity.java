@@ -40,6 +40,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
     ConstraintLayout constraintLayout;
     CoordinatorLayout coordinatorLayout;
     RunOneTime runOneTime;
+    public int edit = 0;
+    public int position;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -274,20 +276,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
             @Override
             public void onClick(View v)
             {
-
-                fab.setVisibility(View.GONE);
-
-                toolbar.setVisibility(View.GONE);
-                tabLayout.setVisibility(View.GONE);
-
-                getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container_id, createSubjFragment, createSubjFragment.getTag())
-                        .addToBackStack("tag")
-                        .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
-                        .commit();
-
-                frameLayout.bringToFront();
+                showCreateSubjectFragment();
             }
         });
     }
@@ -318,6 +307,23 @@ public class MainActivity extends AppCompatActivity implements Communicator
             ((SunFragment) fragment).createSubject(subjectModel);
         }
 
+    }
+
+    public void showCreateSubjectFragment()
+    {
+        fab.setVisibility(View.GONE);
+
+        toolbar.setVisibility(View.GONE);
+        tabLayout.setVisibility(View.GONE);
+
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.fragment_container_id, createSubjFragment, createSubjFragment.getTag())
+                .addToBackStack("tag")
+                .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                .commit();
+
+        frameLayout.bringToFront();
     }
 
 
