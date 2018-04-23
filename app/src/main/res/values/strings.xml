@@ -2,4 +2,9 @@
     <string name="app_name">Timetable</string>
     <string name="create_subject_activity_title">Create subject</string>
     <string name="menu_settings">Settings</string>
+    <string name="settings_activity_title">Settings</string>
+    <string name="settings_notifications_title">Notifications</string>
+    <string name="reset_timetable_settings_title">Reset timetable</string>
+    <string name="weekend_days_settings_title">Weekend days</string>
+    <string name="rate_app_settings_title">Rate app on the PlayStore!</string>
 </resources>
