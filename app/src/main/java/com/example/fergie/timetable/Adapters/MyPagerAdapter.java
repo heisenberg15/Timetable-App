@@ -1,9 +1,13 @@
 package com.example.fergie.timetable.Adapters;
 
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentStatePagerAdapter;
+
+import com.example.fergie.timetable.Fragments.SunFragment;
 
 import java.util.ArrayList;
 
@@ -11,42 +15,43 @@ import java.util.ArrayList;
  * Created by Fergie on 1/9/2018.
  */
 
-public class MyPagerAdapter extends FragmentPagerAdapter
-{
+public class MyPagerAdapter extends FragmentStatePagerAdapter {
 
     private ArrayList<Fragment> fragmentList;
     private ArrayList<String> tabTitles;
 
-    public MyPagerAdapter(FragmentManager fm)
-    {
+    public MyPagerAdapter(FragmentManager fm) {
         super(fm);
         fragmentList = new ArrayList<>();
         tabTitles = new ArrayList<>();
     }
 
     @Override
-    public Fragment getItem(int position)
-    {
+    public Fragment getItem(int position) {
         return fragmentList.get(position);
     }
 
     @Override
-    public int getCount()
-    {
+    public int getCount() {
         return fragmentList.size();
     }
 
     @Nullable
     @Override
-    public CharSequence getPageTitle(int position)
-    {
+    public CharSequence getPageTitle(int position) {
         return tabTitles.get(position);
     }
 
-    public void addFragment(Fragment fragment, String title)
-    {
+
+    public void addFragment(Fragment fragment, String title) {
         fragmentList.add(fragment);
         tabTitles.add(title);
     }
+
+    public void clearData() {
+        fragmentList.clear();
+        tabTitles.clear();
+    }
+
 
 }

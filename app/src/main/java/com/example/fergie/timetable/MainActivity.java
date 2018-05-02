@@ -30,12 +30,11 @@ import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.Utils.Singleton;
 import com.google.gson.Gson;
 
-public class MainActivity extends AppCompatActivity implements Communicator
-{
+public class MainActivity extends AppCompatActivity implements Communicator {
 
     private Toolbar toolbar;
     private TabLayout tabLayout;
-    private ViewPager viewPager;
+    public ViewPager viewPager;
     private FloatingActionButton fab;
     public SubjectModel subjectModel;
     public CreateSubjFragment createSubjFragment;
@@ -45,12 +44,20 @@ public class MainActivity extends AppCompatActivity implements Communicator
     RunOneTime runOneTime;
     public int edit = 0;
     public int position;
+    public MyPagerAdapter myPagerAdapter;
+    SatFragment satFragment;
+    SunFragment sunFragment;
+    MonFragment monFragment;
+    TueFragment tueFragment;
+    WedFragment wedFragment;
+    ThuFragment thuFragment;
+    FriFragment friFragment;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState)
-    {
+    protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        retrySavedSettings();
 
 
         toolbar = findViewById(R.id.toolbar_id);
@@ -62,6 +69,14 @@ public class MainActivity extends AppCompatActivity implements Communicator
         frameLayout = findViewById(R.id.fragment_container_id);
         constraintLayout = findViewById(R.id.create_subject_fragment);
         runOneTime = new RunOneTime();
+        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        satFragment = new SatFragment();
+        sunFragment = new SunFragment();
+        monFragment = new MonFragment();
+        tueFragment = new TueFragment();
+        wedFragment = new WedFragment();
+        thuFragment = new ThuFragment();
+        friFragment = new FriFragment();
 
         setSupportActionBar(toolbar);
 
@@ -80,8 +95,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
     // save subject lists in shared preferences
     @Override
-    protected void onStop()
-    {
+    protected void onStop() {
         super.onStop();
 
         SharedPreferences saveSingleton = getSharedPreferences("saveSingleton", MODE_PRIVATE);
@@ -106,8 +120,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
+    protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
         int fabVisibility = fab.getVisibility();
         int toolbarVisibility = toolbar.getVisibility();
@@ -121,8 +134,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 
     @Override
-    protected void onRestoreInstanceState(Bundle savedInstanceState)
-    {
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
         super.onRestoreInstanceState(savedInstanceState);
 
         frameLayout.bringToFront();
@@ -133,15 +145,13 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 
     @Override
-    public boolean onCreateOptionsMenu(Menu menu)
-    {
+    public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.menu, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item)
-    {
+    public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.settings_id:
                 Intent openSettings = new Intent(getApplicationContext(), Settings.class);
@@ -152,8 +162,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 
     @Override
-    public void onBackPressed()
-    {
+    public void onBackPressed() {
         super.onBackPressed();
         toolbar.setVisibility(View.VISIBLE);
         tabLayout.setVisibility(View.VISIBLE);
@@ -162,54 +171,64 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 
     // Fill pagerAdapter with Fragments and Titles
-    private void fillPages()
-    {
-        MonFragment monFragment = new MonFragment();
-        TueFragment tueFragment = new TueFragment();
-        WedFragment wedFragment = new WedFragment();
-        ThuFragment thuFragment = new ThuFragment();
-        FriFragment friFragment = new FriFragment();
-        SatFragment satFragment = new SatFragment();
-        SunFragment sunFragment = new SunFragment();
+    private void fillPages() {
 
-        MyPagerAdapter myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
         myPagerAdapter.addFragment(monFragment, "Mon");
         myPagerAdapter.addFragment(tueFragment, "Tue");
         myPagerAdapter.addFragment(wedFragment, "Wed");
         myPagerAdapter.addFragment(thuFragment, "Thu");
         myPagerAdapter.addFragment(friFragment, "Fri");
-        myPagerAdapter.addFragment(satFragment, "Sat");
-        myPagerAdapter.addFragment(sunFragment, "Sun");
+
+
 
         viewPager.setAdapter(myPagerAdapter);
     }
 
-    private void initTabs()
-    {
+//    @Override
+//    protected void onResume() {
+//        super.onResume();
+//        myPagerAdapter.clearData();
+//
+//        if (Settings.switchState){
+//            myPagerAdapter.addFragment(monFragment, "Mon");
+//            myPagerAdapter.addFragment(tueFragment, "Tue");
+//            myPagerAdapter.addFragment(wedFragment, "Wed");
+//            myPagerAdapter.addFragment(thuFragment, "Thu");
+//            myPagerAdapter.addFragment(friFragment, "Fri");
+//            myPagerAdapter.addFragment(satFragment, "Sat");
+//            myPagerAdapter.addFragment(sunFragment, "Sun");
+//        }else {
+//            myPagerAdapter.addFragment(monFragment, "Mon");
+//            myPagerAdapter.addFragment(tueFragment, "Tue");
+//            myPagerAdapter.addFragment(wedFragment, "Wed");
+//            myPagerAdapter.addFragment(thuFragment, "Thu");
+//            myPagerAdapter.addFragment(friFragment, "Fri");
+//        }
+//
+//        myPagerAdapter.notifyDataSetChanged();
+//        viewPager.setAdapter(myPagerAdapter);
+//    }
+
+    private void initTabs() {
         tabLayout.setupWithViewPager(viewPager);
     }
 
 
     // Floating action button animation on fragment change
-    private void fabAnimation()
-    {
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener()
-        {
+    private void fabAnimation() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels)
-            {
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
             }
 
             @Override
-            public void onPageSelected(int position)
-            {
+            public void onPageSelected(int position) {
 
             }
 
             @Override
-            public void onPageScrollStateChanged(int state)
-            {
+            public void onPageScrollStateChanged(int state) {
                 switch (state) {
                     case ViewPager.SCROLL_STATE_IDLE:
                         fab.show();
@@ -225,13 +244,10 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 
     // create new subject
-    private void clickFab()
-    {
-        fab.setOnClickListener(new View.OnClickListener()
-        {
+    private void clickFab() {
+        fab.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 showCreateSubjectFragment();
             }
         });
@@ -239,8 +255,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
     // Send subject objects to appropriate fragments
     @Override
-    public void respond(SubjectModel subjectModel)
-    {
+    public void respond(SubjectModel subjectModel) {
         toolbar.setVisibility(View.VISIBLE);
         tabLayout.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
@@ -265,8 +280,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
     }
 
-    public void showCreateSubjectFragment()
-    {
+    public void showCreateSubjectFragment() {
         fab.setVisibility(View.GONE);
 
         toolbar.setVisibility(View.GONE);
@@ -282,38 +296,33 @@ public class MainActivity extends AppCompatActivity implements Communicator
         frameLayout.bringToFront();
     }
 
+    private void retrySavedSettings() {
+        SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
+        Settings.switchState = settings.getBoolean("switchState", false);
+    }
 
-    // Check and update singleton subject lists
-//    public void updateSingletonLists(String stringDay)
-//    {
-//        if (stringDay != null) {
-//            SharedPreferences saveSingleton = getSharedPreferences("saveSingleton", MODE_PRIVATE);
-//            ArrayList<SubjectModel> list = new Gson().fromJson(stringDay, new TypeToken<ArrayList<SubjectModel>>()
-//            {
-//            }.getType());
+//    public void updateViewPaget(boolean isChecked) {
+//        myPagerAdapter.clearData();
 //
-//            for (int i = 0; i < list.size(); i++) {
-//
-//                if (saveSingleton.getString("mondayList", null).equals(stringDay)) {
-//                    Singleton.getInstance().addMonSubject(list.get(i));
-//                } else if(saveSingleton.getString("tuesdayList", null) == stringDay){
-//                    Singleton.getInstance().addTueSubject(list.get(i));
-//                } else if(saveSingleton.getString("wednesdayList", null) == stringDay) {
-//                    Singleton.getInstance().addWedSubject(list.get(i));
-//                } else if(saveSingleton.getString("thursdayList", null) == stringDay) {
-//                    Singleton.getInstance().addThuSubject(list.get(i));
-//                } else if(saveSingleton.getString("fridayList", null) == stringDay) {
-//                    Singleton.getInstance().addFriSubject(list.get(i));
-//                } else if(saveSingleton.getString("saturdayList", null) == stringDay) {
-//                    Singleton.getInstance().addSatSubject(list.get(i));
-//                } else if(saveSingleton.getString("sundayList", null) == stringDay) {
-//                    Singleton.getInstance().addSunSubject(list.get(i));
-//                }
-//
-//            }
+//        if (isChecked){
+//            myPagerAdapter.addFragment(monFragment, "Mon");
+//            myPagerAdapter.addFragment(tueFragment, "Tue");
+//            myPagerAdapter.addFragment(wedFragment, "Wed");
+//            myPagerAdapter.addFragment(thuFragment, "Thu");
+//            myPagerAdapter.addFragment(friFragment, "Fri");
+//            myPagerAdapter.addFragment(satFragment, "Sat");
+//            myPagerAdapter.addFragment(sunFragment, "Sun");
+//        }else {
+//            myPagerAdapter.addFragment(monFragment, "Mon");
+//            myPagerAdapter.addFragment(tueFragment, "Tue");
+//            myPagerAdapter.addFragment(wedFragment, "Wed");
+//            myPagerAdapter.addFragment(thuFragment, "Thu");
+//            myPagerAdapter.addFragment(friFragment, "Fri");
 //        }
+//
+//        myPagerAdapter.notifyDataSetChanged();
+//        viewPager.setAdapter(myPagerAdapter);
 //    }
-
 
 }
 
