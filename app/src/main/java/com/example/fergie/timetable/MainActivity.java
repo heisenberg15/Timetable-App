@@ -51,6 +51,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        retrySavedSettings();
 
 
         toolbar = findViewById(R.id.toolbar_id);
@@ -282,6 +283,11 @@ public class MainActivity extends AppCompatActivity implements Communicator
         frameLayout.bringToFront();
     }
 
+
+    private void retrySavedSettings() {
+        SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
+        Settings.switchState = settings.getBoolean("switchState", false);
+    }
 
     // Check and update singleton subject lists
 //    public void updateSingletonLists(String stringDay)
