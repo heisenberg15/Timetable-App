@@ -45,6 +45,14 @@ public class MainActivity extends AppCompatActivity implements Communicator
     RunOneTime runOneTime;
     public int edit = 0;
     public int position;
+    MyPagerAdapter myPagerAdapter;
+    MonFragment monFragment;
+    TueFragment tueFragment;
+    WedFragment wedFragment;
+    ThuFragment thuFragment;
+    FriFragment friFragment;
+    SatFragment satFragment;
+    SunFragment sunFragment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -52,7 +60,6 @@ public class MainActivity extends AppCompatActivity implements Communicator
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         retrySavedSettings();
-
 
         toolbar = findViewById(R.id.toolbar_id);
         tabLayout = findViewById(R.id.tablayout_id);
@@ -63,17 +70,24 @@ public class MainActivity extends AppCompatActivity implements Communicator
         frameLayout = findViewById(R.id.fragment_container_id);
         constraintLayout = findViewById(R.id.create_subject_fragment);
         runOneTime = new RunOneTime();
+        myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
+        monFragment = new MonFragment();
+        tueFragment = new TueFragment();
+        wedFragment = new WedFragment();
+        thuFragment = new ThuFragment();
+        friFragment = new FriFragment();
+        satFragment = new SatFragment();
+        sunFragment = new SunFragment();
 
         setSupportActionBar(toolbar);
 
-        fillPages();
+//        fillPages();
 
         initTabs();
 
         fabAnimation();
 
         clickFab();
-
 
         viewPager.setOffscreenPageLimit(7);
 
@@ -143,7 +157,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
     @Override
     public boolean onOptionsItemSelected(MenuItem item)
     {
-        switch (item.getItemId()) {
+        switch (item.getItemId())
+        {
             case R.id.settings_id:
                 Intent openSettings = new Intent(getApplicationContext(), Settings.class);
                 startActivity(openSettings);
@@ -163,25 +178,48 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 
     // Fill pagerAdapter with Fragments and Titles
-    private void fillPages()
+//    private void fillPages() {
+//
+//        myPagerAdapter.clearData();
+//        myPagerAdapter.addFragment(monFragment, "Mon");
+//        myPagerAdapter.addFragment(tueFragment, "Tue");
+//        myPagerAdapter.addFragment(wedFragment, "Wed");
+//        myPagerAdapter.addFragment(thuFragment, "Thu");
+//        myPagerAdapter.addFragment(friFragment, "Fri");
+//
+//        if (Settings.switchState) {
+//            myPagerAdapter.addFragment(satFragment, "Sat");
+//            myPagerAdapter.addFragment(sunFragment, "Sun");
+//        }
+//
+//        viewPager.setAdapter(myPagerAdapter);
+//    }
+
+    @Override
+    protected void onResume()
     {
-        MonFragment monFragment = new MonFragment();
-        TueFragment tueFragment = new TueFragment();
-        WedFragment wedFragment = new WedFragment();
-        ThuFragment thuFragment = new ThuFragment();
-        FriFragment friFragment = new FriFragment();
-        SatFragment satFragment = new SatFragment();
-        SunFragment sunFragment = new SunFragment();
+        super.onResume();
 
-        MyPagerAdapter myPagerAdapter = new MyPagerAdapter(getSupportFragmentManager());
-        myPagerAdapter.addFragment(monFragment, "Mon");
-        myPagerAdapter.addFragment(tueFragment, "Tue");
-        myPagerAdapter.addFragment(wedFragment, "Wed");
-        myPagerAdapter.addFragment(thuFragment, "Thu");
-        myPagerAdapter.addFragment(friFragment, "Fri");
-        myPagerAdapter.addFragment(satFragment, "Sat");
-        myPagerAdapter.addFragment(sunFragment, "Sun");
+        // Fill pagerAdapter with Fragments and Titles
+        myPagerAdapter.clearData();
 
+        if (Settings.switchState)
+        {
+            myPagerAdapter.addFragment(monFragment, "Mon");
+            myPagerAdapter.addFragment(tueFragment, "Tue");
+            myPagerAdapter.addFragment(wedFragment, "Wed");
+            myPagerAdapter.addFragment(thuFragment, "Thu");
+            myPagerAdapter.addFragment(friFragment, "Fri");
+            myPagerAdapter.addFragment(satFragment, "Sat");
+            myPagerAdapter.addFragment(sunFragment, "Sun");
+        } else
+        {
+            myPagerAdapter.addFragment(monFragment, "Mon");
+            myPagerAdapter.addFragment(tueFragment, "Tue");
+            myPagerAdapter.addFragment(wedFragment, "Wed");
+            myPagerAdapter.addFragment(thuFragment, "Thu");
+            myPagerAdapter.addFragment(friFragment, "Fri");
+        }
         viewPager.setAdapter(myPagerAdapter);
     }
 
@@ -211,7 +249,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
             @Override
             public void onPageScrollStateChanged(int state)
             {
-                switch (state) {
+                switch (state)
+                {
                     case ViewPager.SCROLL_STATE_IDLE:
                         fab.show();
                         break;
@@ -248,19 +287,26 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
         Fragment fragment = getSupportFragmentManager().findFragmentByTag("android:switcher:" + R.id.viewpager_id + ":" + viewPager.getCurrentItem());
 
-        if (viewPager.getCurrentItem() == 0 && fragment != null) {
+        if (viewPager.getCurrentItem() == 0 && fragment != null)
+        {
             ((MonFragment) fragment).createSubject(subjectModel);
-        } else if (viewPager.getCurrentItem() == 1 && fragment != null) {
+        } else if (viewPager.getCurrentItem() == 1 && fragment != null)
+        {
             ((TueFragment) fragment).createSubject(subjectModel);
-        } else if (viewPager.getCurrentItem() == 2 && fragment != null) {
+        } else if (viewPager.getCurrentItem() == 2 && fragment != null)
+        {
             ((WedFragment) fragment).createSubject(subjectModel);
-        } else if (viewPager.getCurrentItem() == 3 && fragment != null) {
+        } else if (viewPager.getCurrentItem() == 3 && fragment != null)
+        {
             ((ThuFragment) fragment).createSubject(subjectModel);
-        } else if (viewPager.getCurrentItem() == 4 && fragment != null) {
+        } else if (viewPager.getCurrentItem() == 4 && fragment != null)
+        {
             ((FriFragment) fragment).createSubject(subjectModel);
-        } else if (viewPager.getCurrentItem() == 5 && fragment != null) {
+        } else if (viewPager.getCurrentItem() == 5 && fragment != null)
+        {
             ((SatFragment) fragment).createSubject(subjectModel);
-        } else if (viewPager.getCurrentItem() == 6 && fragment != null) {
+        } else if (viewPager.getCurrentItem() == 6 && fragment != null)
+        {
             ((SunFragment) fragment).createSubject(subjectModel);
         }
 
@@ -284,7 +330,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 
 
-    private void retrySavedSettings() {
+    private void retrySavedSettings()
+    {
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
         Settings.switchState = settings.getBoolean("switchState", false);
     }

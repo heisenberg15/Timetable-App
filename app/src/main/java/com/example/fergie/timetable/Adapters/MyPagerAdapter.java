@@ -49,4 +49,10 @@ public class MyPagerAdapter extends FragmentPagerAdapter
         tabTitles.add(title);
     }
 
+    public void clearData()
+    {
+        fragmentList.clear();
+        tabTitles.clear();
+    }
+
 }

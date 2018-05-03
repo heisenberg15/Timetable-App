@@ -18,7 +18,8 @@ import com.example.fergie.timetable.Fragments.ThuFragment;
 import com.example.fergie.timetable.Fragments.TueFragment;
 import com.example.fergie.timetable.Fragments.WedFragment;
 
-public class Settings extends AppCompatActivity {
+public class Settings extends AppCompatActivity
+{
 
     Toolbar toolbar;
     Switch switchBtn;
@@ -27,7 +28,8 @@ public class Settings extends AppCompatActivity {
     static boolean switchState;
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle savedInstanceState)
+    {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_settings);
         toolbar = findViewById(R.id.settings_toolbar_id);
@@ -43,14 +45,17 @@ public class Settings extends AppCompatActivity {
     }
 
     @Override
-    protected void onStop() {
+    protected void onStop()
+    {
         super.onStop();
-        if (switchState) {
+        if (switchState)
+        {
             SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("switchState", true);
             editor.apply();
-        } else {
+        } else
+        {
             SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("switchState", false);
@@ -58,14 +63,17 @@ public class Settings extends AppCompatActivity {
         }
     }
 
-    private void initToolbar() {
+    private void initToolbar()
+    {
         setSupportActionBar(toolbar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
     }
 
     @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
+    public boolean onOptionsItemSelected(MenuItem item)
+    {
+        switch (item.getItemId())
+        {
             case android.R.id.home:
                 onBackPressed();
         }
@@ -73,19 +81,25 @@ public class Settings extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    private void toggleSwitch() {
-        weekendDaysView.setOnClickListener(new View.OnClickListener() {
+    private void toggleSwitch()
+    {
+        weekendDaysView.setOnClickListener(new View.OnClickListener()
+        {
             @Override
-            public void onClick(View v) {
+            public void onClick(View v)
+            {
                 switchBtn.toggle();
             }
         });
     }
 
-    private void checkSwitch() {
-        switchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+    private void checkSwitch()
+    {
+        switchBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener()
+        {
             @Override
-            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
+            {
                 switchState = isChecked;
 
 //                MonFragment monFragment = new MonFragment();
@@ -113,10 +127,13 @@ public class Settings extends AppCompatActivity {
         });
     }
 
-    private void setSwitchUi() {
-        if (switchState) {
+    private void setSwitchUi()
+    {
+        if (switchState)
+        {
             switchBtn.setChecked(true);
-        } else {
+        } else
+        {
             switchBtn.setChecked(false);
         }
     }
