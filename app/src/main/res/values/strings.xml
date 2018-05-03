@@ -8,5 +8,10 @@
     <string name="weekend_days_settings_title">Weekend days</string>
     <string name="rate_app_settings_title">Rate app on the PlayStore!</string>
     <string name="reset_table_dialog_title">Reset Timetable</string>
-    <string name="reset_table_dialog_message">Remove all data?</string>
+    <string name="reset_table_dialog_message">This will remove all of your data! \n are u sure?</string>
+    <string name="reset">Reset</string>
+    <string name="cancel">Cancel</string>
+    <string name="off">Off</string>
+    <string name="instant">Instant</string>
+    <string name="custom">Custom</string>
 </resources>

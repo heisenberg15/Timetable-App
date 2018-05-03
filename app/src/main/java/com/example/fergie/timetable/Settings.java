@@ -9,6 +9,8 @@ import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
+import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.Switch;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -31,6 +33,8 @@ public class Settings extends AppCompatActivity
     MainActivity mainActivity;
     private TextView resetTableBtn;
     static boolean switchState;
+    TextView notificationTime;
+    private LinearLayout notificationView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -42,12 +46,15 @@ public class Settings extends AppCompatActivity
         weekendDaysView = findViewById(R.id.weekend_days_view_id);
         mainActivity = new MainActivity();
         resetTableBtn = findViewById(R.id.reset_table_view_id);
+        notificationView = findViewById(R.id.notification_container_id);
+        notificationTime = findViewById(R.id.time_before_class_id);
 
         initToolbar();
         toggleSwitch();
         checkSwitch();
         setSwitchUi();
         resetTable();
+        setNotification();
 
     }
 
@@ -133,8 +140,10 @@ public class Settings extends AppCompatActivity
                 new AlertDialog.Builder(Settings.this)
                         .setTitle(R.string.reset_table_dialog_title)
                         .setMessage(R.string.reset_table_dialog_message)
-                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+                        .setPositiveButton(R.string.reset, new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
 
                                 Singleton.getInstance().getMonList().clear();
                                 Singleton.getInstance().getTueList().clear();
@@ -148,8 +157,10 @@ public class Settings extends AppCompatActivity
 
                             }
                         })
-                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                            public void onClick(DialogInterface dialog, int which) {
+                        .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()
+                        {
+                            public void onClick(DialogInterface dialog, int which)
+                            {
 
                             }
                         })
@@ -158,5 +169,43 @@ public class Settings extends AppCompatActivity
         });
     }
 
+    private void setNotification()
+    {
+        notificationView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                showMenu(v);
+            }
+        });
+    }
+
+    private void showMenu(View v)
+    {
+        PopupMenu popupMenu = new PopupMenu(this, v);
+        popupMenu.inflate(R.menu.notifications_menu);
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
+        {
+            @Override
+            public boolean onMenuItemClick(MenuItem item)
+            {
+                switch (item.getItemId())
+                {
+                    case R.id.off_id:
+                        notificationTime.setText("No notifications");
+                        return true;
+                    case R.id.instant_id:
+                        notificationTime.setText("Instant notifications");
+                        return true;
+                    case R.id.custom_time_id:
+                        notificationTime.setText("5 minutes before class");
+                    default:
+                        return true;
+                }
+            }
+        });
+        popupMenu.show();
+    }
 
 }
