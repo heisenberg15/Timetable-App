@@ -17,14 +17,16 @@ import com.example.fergie.timetable.Fragments.SunFragment;
 import com.example.fergie.timetable.Fragments.ThuFragment;
 import com.example.fergie.timetable.Fragments.TueFragment;
 import com.example.fergie.timetable.Fragments.WedFragment;
+import com.example.fergie.timetable.Utils.Singleton;
 
 public class Settings extends AppCompatActivity
 {
 
-    Toolbar toolbar;
-    Switch switchBtn;
-    TextView weekendDaysView;
+    private Toolbar toolbar;
+    private Switch switchBtn;
+    private TextView weekendDaysView;
     MainActivity mainActivity;
+    private TextView resetTableBtn;
     static boolean switchState;
 
     @Override
@@ -36,11 +38,13 @@ public class Settings extends AppCompatActivity
         switchBtn = findViewById(R.id.switcher_id);
         weekendDaysView = findViewById(R.id.weekend_days_view_id);
         mainActivity = new MainActivity();
+        resetTableBtn = findViewById(R.id.reset_table_view_id);
 
         initToolbar();
         toggleSwitch();
         checkSwitch();
         setSwitchUi();
+        resetTable();
 
     }
 
@@ -101,28 +105,6 @@ public class Settings extends AppCompatActivity
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked)
             {
                 switchState = isChecked;
-
-//                MonFragment monFragment = new MonFragment();
-//                TueFragment tueFragment = new TueFragment();
-//                WedFragment wedFragment = new WedFragment();
-//                ThuFragment thuFragment = new ThuFragment();
-//                FriFragment friFragment = new FriFragment();
-//                SatFragment satFragment = new SatFragment();
-//                SunFragment sunFragment = new SunFragment();
-//
-//
-//                if (isChecked) {
-//                    mainActivity.myPagerAdapter.addFragment(mainActivity.satFragment, "Sat");
-//                    mainActivity.myPagerAdapter.addFragment(mainActivity.sunFragment, "Sun");
-//                } else {
-//                    mainActivity.myPagerAdapter.addFragment(mainActivity.monFragment, "Mon");
-//                    mainActivity.myPagerAdapter.addFragment(mainActivity.tueFragment, "Tue");
-//                    mainActivity.myPagerAdapter.addFragment(mainActivity.wedFragment, "Wed");
-//                    mainActivity.myPagerAdapter.addFragment(mainActivity.thuFragment, "Thu");
-//                    mainActivity.myPagerAdapter.addFragment(mainActivity.friFragment, "Fri");
-//                }
-//
-//                mainActivity.viewPager.setAdapter(mainActivity.myPagerAdapter);
             }
         });
     }
@@ -136,6 +118,24 @@ public class Settings extends AppCompatActivity
         {
             switchBtn.setChecked(false);
         }
+    }
+
+    private void resetTable()
+    {
+        resetTableBtn.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                Singleton.getInstance().getMonList().clear();
+                Singleton.getInstance().getTueList().clear();
+                Singleton.getInstance().getWedList().clear();
+                Singleton.getInstance().getTueList().clear();
+                Singleton.getInstance().getFriList().clear();
+                Singleton.getInstance().getSatList().clear();
+                Singleton.getInstance().getSunList().clear();
+            }
+        });
     }
 
 

@@ -1,28 +1,18 @@
 package com.example.fergie.timetable.Adapters;
 
 import android.content.Context;
-import android.os.Bundle;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.fergie.timetable.Fragments.CreateSubjFragment;
-import com.example.fergie.timetable.Fragments.MonFragment;
 import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
-import com.example.fergie.timetable.Utils.PassSubject;
 
 import java.util.ArrayList;
-import java.util.List;
-
-import static android.content.ContentValues.TAG;
 
 /**
  * Created by Fergie on 1/18/2018.
