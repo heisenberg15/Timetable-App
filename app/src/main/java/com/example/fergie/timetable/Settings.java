@@ -1,7 +1,9 @@
 package com.example.fergie.timetable;
 
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
@@ -9,6 +11,7 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.Switch;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.fergie.timetable.Fragments.FriFragment;
 import com.example.fergie.timetable.Fragments.MonFragment;
@@ -127,13 +130,30 @@ public class Settings extends AppCompatActivity
             @Override
             public void onClick(View v)
             {
-                Singleton.getInstance().getMonList().clear();
-                Singleton.getInstance().getTueList().clear();
-                Singleton.getInstance().getWedList().clear();
-                Singleton.getInstance().getTueList().clear();
-                Singleton.getInstance().getFriList().clear();
-                Singleton.getInstance().getSatList().clear();
-                Singleton.getInstance().getSunList().clear();
+                new AlertDialog.Builder(Settings.this)
+                        .setTitle(R.string.reset_table_dialog_title)
+                        .setMessage(R.string.reset_table_dialog_message)
+                        .setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                                Singleton.getInstance().getMonList().clear();
+                                Singleton.getInstance().getTueList().clear();
+                                Singleton.getInstance().getWedList().clear();
+                                Singleton.getInstance().getThuList().clear();
+                                Singleton.getInstance().getFriList().clear();
+                                Singleton.getInstance().getSatList().clear();
+                                Singleton.getInstance().getSunList().clear();
+
+                                Toast.makeText(Settings.this, "All data removed", Toast.LENGTH_SHORT).show();
+
+                            }
+                        })
+                        .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                            public void onClick(DialogInterface dialog, int which) {
+
+                            }
+                        })
+                        .show();
             }
         });
     }
