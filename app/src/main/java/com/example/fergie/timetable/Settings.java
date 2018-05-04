@@ -1,5 +1,6 @@
 package com.example.fergie.timetable;
 
+import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -8,8 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
 import android.widget.CompoundButton;
 import android.widget.LinearLayout;
+import android.widget.NumberPicker;
 import android.widget.PopupMenu;
 import android.widget.Switch;
 import android.widget.TextView;
@@ -199,7 +202,33 @@ public class Settings extends AppCompatActivity
                         notificationTime.setText("Instant notifications");
                         return true;
                     case R.id.custom_time_id:
-                        notificationTime.setText("5 minutes before class");
+                        final Dialog dialog = new Dialog(Settings.this, R.style.Theme_Dialog);
+                        dialog.setContentView(R.layout.dialog_pick_number);
+                        dialog.setTitle("Notification time");
+//                        Window window = dialog.getWindow();
+//                        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
+                        NumberPicker numberPicker = dialog.findViewById(R.id.number_picker_id);
+                        numberPicker.setMinValue(1);
+                        numberPicker.setMaxValue(60);
+                        numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener()
+                        {
+                            @Override
+                            public void onValueChange(NumberPicker picker, int oldVal, int newVal)
+                            {
+                                notificationTime.setText(newVal + " minutes before class");
+                            }
+                        });
+                        dialog.show();
+
+                        TextView cancelDialogbtn = dialog.findViewById(R.id.cancel_dialog_id);
+                        cancelDialogbtn.setOnClickListener(new View.OnClickListener()
+                        {
+                            @Override
+                            public void onClick(View v)
+                            {
+                                dialog.dismiss();
+                            }
+                        });
                     default:
                         return true;
                 }
