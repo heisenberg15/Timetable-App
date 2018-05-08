@@ -1,5 +1,7 @@
 package com.example.fergie.timetable;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -27,8 +29,11 @@ import com.example.fergie.timetable.Fragments.ThuFragment;
 import com.example.fergie.timetable.Fragments.TueFragment;
 import com.example.fergie.timetable.Fragments.WedFragment;
 import com.example.fergie.timetable.Models.SubjectModel;
+import com.example.fergie.timetable.Utils.AlarmReceiver;
 import com.example.fergie.timetable.Utils.Singleton;
 import com.google.gson.Gson;
+
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements Communicator
 {
@@ -90,6 +95,9 @@ public class MainActivity extends AppCompatActivity implements Communicator
         clickFab();
 
         viewPager.setOffscreenPageLimit(7);
+
+
+
 
     }
 
@@ -330,42 +338,14 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 
 
+
+
     private void retrySavedSettings()
     {
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
         Settings.switchState = settings.getBoolean("switchState", false);
+        Settings.notificationsOn = settings.getBoolean("notificationsOn", true);
     }
-
-    // Check and update singleton subject lists
-//    public void updateSingletonLists(String stringDay)
-//    {
-//        if (stringDay != null) {
-//            SharedPreferences saveSingleton = getSharedPreferences("saveSingleton", MODE_PRIVATE);
-//            ArrayList<SubjectModel> list = new Gson().fromJson(stringDay, new TypeToken<ArrayList<SubjectModel>>()
-//            {
-//            }.getType());
-//
-//            for (int i = 0; i < list.size(); i++) {
-//
-//                if (saveSingleton.getString("mondayList", null).equals(stringDay)) {
-//                    Singleton.getInstance().addMonSubject(list.get(i));
-//                } else if(saveSingleton.getString("tuesdayList", null) == stringDay){
-//                    Singleton.getInstance().addTueSubject(list.get(i));
-//                } else if(saveSingleton.getString("wednesdayList", null) == stringDay) {
-//                    Singleton.getInstance().addWedSubject(list.get(i));
-//                } else if(saveSingleton.getString("thursdayList", null) == stringDay) {
-//                    Singleton.getInstance().addThuSubject(list.get(i));
-//                } else if(saveSingleton.getString("fridayList", null) == stringDay) {
-//                    Singleton.getInstance().addFriSubject(list.get(i));
-//                } else if(saveSingleton.getString("saturdayList", null) == stringDay) {
-//                    Singleton.getInstance().addSatSubject(list.get(i));
-//                } else if(saveSingleton.getString("sundayList", null) == stringDay) {
-//                    Singleton.getInstance().addSunSubject(list.get(i));
-//                }
-//
-//            }
-//        }
-//    }
 
 
 }

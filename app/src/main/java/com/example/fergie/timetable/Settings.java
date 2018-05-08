@@ -1,9 +1,11 @@
 package com.example.fergie.timetable;
 
 import android.app.Dialog;
+import android.app.NotificationManager;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.NotificationCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
@@ -38,6 +40,7 @@ public class Settings extends AppCompatActivity
     static boolean switchState;
     TextView notificationTime;
     private LinearLayout notificationView;
+    public static boolean notificationsOn = true;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -76,6 +79,19 @@ public class Settings extends AppCompatActivity
             SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
             editor.putBoolean("switchState", false);
+            editor.apply();
+        }
+
+        if (notificationsOn)
+        {
+            SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("notificationsOn", true);
+            editor.apply();
+        } else {
+            SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putBoolean("notificationsOn", false);
             editor.apply();
         }
     }
@@ -196,17 +212,17 @@ public class Settings extends AppCompatActivity
                 switch (item.getItemId())
                 {
                     case R.id.off_id:
+                        notificationsOn = false;
                         notificationTime.setText("No notifications");
                         return true;
                     case R.id.instant_id:
+                        notificationsOn = true;
                         notificationTime.setText("Instant notifications");
                         return true;
                     case R.id.custom_time_id:
                         final Dialog dialog = new Dialog(Settings.this, R.style.Theme_Dialog);
                         dialog.setContentView(R.layout.dialog_pick_number);
                         dialog.setTitle("Notification time");
-//                        Window window = dialog.getWindow();
-//                        window.setLayout(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.MATCH_PARENT);
                         NumberPicker numberPicker = dialog.findViewById(R.id.number_picker_id);
                         numberPicker.setMinValue(1);
                         numberPicker.setMaxValue(60);
@@ -216,12 +232,13 @@ public class Settings extends AppCompatActivity
                             public void onValueChange(NumberPicker picker, int oldVal, int newVal)
                             {
                                 notificationTime.setText(newVal + " minutes before class");
+
                             }
                         });
                         dialog.show();
 
-                        TextView cancelDialogbtn = dialog.findViewById(R.id.cancel_dialog_id);
-                        cancelDialogbtn.setOnClickListener(new View.OnClickListener()
+                        TextView cancelDialogBtn = dialog.findViewById(R.id.cancel_dialog_id);
+                        cancelDialogBtn.setOnClickListener(new View.OnClickListener()
                         {
                             @Override
                             public void onClick(View v)
@@ -229,6 +246,15 @@ public class Settings extends AppCompatActivity
                                 dialog.dismiss();
                             }
                         });
+
+//                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "channel_id")
+//                                .setSmallIcon(R.mipmap.ic_launcher)
+//                                .setContentTitle("Timetable")
+//                                .setContentText("Class starts in 5 minutes");
+//
+//                        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+//                        assert manager != null;
+//                        manager.notify(1, builder.build());
                     default:
                         return true;
                 }

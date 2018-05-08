@@ -44,11 +44,16 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     @Override
     public void onBindViewHolder(ViewHolder holder, final int position)
     {
-        holder.subject.setText(list.get(position).getSubject());
-        holder.info.setText(list.get(position).getInfo());
         holder.startTime.setText(list.get(position).getStartTime());
         holder.endTime.setText(list.get(position).getEndTIme());
-        holder.color.setText(list.get(position).getColor());
+        holder.subject.setText(list.get(position).getSubject());
+
+        if (list.get(position).getInfo().isEmpty())
+        {
+            holder.info.setVisibility(View.GONE);
+        }else {
+            holder.info.setText(list.get(position).getInfo());
+        }
 
         mainActivity = (MainActivity) context;
 
@@ -86,7 +91,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     class ViewHolder extends RecyclerView.ViewHolder
     {
 
-        TextView subject, info, startTime, endTime, color;
+        TextView subject, info, startTime, endTime;
         LinearLayout parentLayout;
 
         ViewHolder(View itemView)
@@ -97,7 +102,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             info = itemView.findViewById(R.id.info_id);
             startTime = itemView.findViewById(R.id.show_start_time);
             endTime = itemView.findViewById(R.id.show_end_time);
-            color = itemView.findViewById(R.id.show_color_id);
             parentLayout = itemView.findViewById(R.id.recycler_item_id);
         }
     }

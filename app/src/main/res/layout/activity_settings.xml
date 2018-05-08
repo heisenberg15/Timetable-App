@@ -42,7 +42,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/settings_notifications_title"
-            android:textColor="@android:color/black"
+            android:textColor="#323232"
             android:textSize="@dimen/settings_text_size" />
 
         <TextView
