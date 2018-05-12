@@ -25,11 +25,13 @@ public class AlarmReceiver extends BroadcastReceiver
         Intent i = new Intent(context, MainActivity.class);
         PendingIntent notificationIntent = PendingIntent.getActivity(context, 1, i, PendingIntent.FLAG_CANCEL_CURRENT);
 
+        String text = intent.getStringExtra("subject");
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id")
                 .setSmallIcon(R.mipmap.ic_launcher)
                 .setContentTitle("Timetable")
                 .setContentIntent(notificationIntent)
-                .setContentText("Class starts in 5 minutes");
+                .setContentText(text);
 
         NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
         manager.notify(1, builder.build());

@@ -63,6 +63,16 @@
                 app:layout_constraintLeft_toRightOf="@id/show_start_time"
                 app:layout_constraintTop_toTopOf="parent" />
 
+            <ImageView
+                android:id="@+id/more_id"
+                app:srcCompat="@drawable/ic_dots_vertical"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_margin="2dp"
+                tools:ignore="MissingPrefix,VectorDrawableCompat"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
             <TextView
                 android:id="@+id/subject_id"
                 android:layout_width="0dp"

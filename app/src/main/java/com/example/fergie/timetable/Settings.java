@@ -40,7 +40,7 @@ public class Settings extends AppCompatActivity
     static boolean switchState;
     TextView notificationTime;
     private LinearLayout notificationView;
-    public static boolean notificationsOn = true;
+    public static int notificationsOn = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,6 +59,7 @@ public class Settings extends AppCompatActivity
         toggleSwitch();
         checkSwitch();
         setSwitchUi();
+        setNotificationUi();
         resetTable();
         setNotification();
 
@@ -82,16 +83,23 @@ public class Settings extends AppCompatActivity
             editor.apply();
         }
 
-        if (notificationsOn)
+        if (notificationsOn == 1)
         {
             SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("notificationsOn", true);
+            editor.putInt("notificationsOn", 1);
             editor.apply();
-        } else {
+        } else if (notificationsOn == 2)
+        {
             SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
-            editor.putBoolean("notificationsOn", false);
+            editor.putInt("notificationsOn", 2);
+            editor.apply();
+        } else if (notificationsOn == 3)
+        {
+            SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("notificationsOn", 3);
             editor.apply();
         }
     }
@@ -146,6 +154,20 @@ public class Settings extends AppCompatActivity
         } else
         {
             switchBtn.setChecked(false);
+        }
+    }
+
+    private void setNotificationUi()
+    {
+        if (notificationsOn == 1)
+        {
+            notificationTime.setText("No notifications");
+        } else if (notificationsOn == 2)
+        {
+            notificationTime.setText("Instant notifications");
+        } else if (notificationsOn == 3)
+        {
+            notificationTime.setText("5 minutes before class");
         }
     }
 
@@ -212,14 +234,15 @@ public class Settings extends AppCompatActivity
                 switch (item.getItemId())
                 {
                     case R.id.off_id:
-                        notificationsOn = false;
+                        notificationsOn = 1;
                         notificationTime.setText("No notifications");
                         return true;
                     case R.id.instant_id:
-                        notificationsOn = true;
+                        notificationsOn = 2;
                         notificationTime.setText("Instant notifications");
                         return true;
                     case R.id.custom_time_id:
+                        notificationsOn = 3;
                         final Dialog dialog = new Dialog(Settings.this, R.style.Theme_Dialog);
                         dialog.setContentView(R.layout.dialog_pick_number);
                         dialog.setTitle("Notification time");

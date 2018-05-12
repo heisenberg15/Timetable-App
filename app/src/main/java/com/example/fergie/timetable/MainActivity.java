@@ -1,7 +1,5 @@
 package com.example.fergie.timetable;
 
-import android.app.AlarmManager;
-import android.app.PendingIntent;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -29,11 +27,8 @@ import com.example.fergie.timetable.Fragments.ThuFragment;
 import com.example.fergie.timetable.Fragments.TueFragment;
 import com.example.fergie.timetable.Fragments.WedFragment;
 import com.example.fergie.timetable.Models.SubjectModel;
-import com.example.fergie.timetable.Utils.AlarmReceiver;
 import com.example.fergie.timetable.Utils.Singleton;
 import com.google.gson.Gson;
-
-import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements Communicator
 {
@@ -344,7 +339,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     {
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
         Settings.switchState = settings.getBoolean("switchState", false);
-        Settings.notificationsOn = settings.getBoolean("notificationsOn", true);
+        Settings.notificationsOn = settings.getInt("notificationsOn", 3);
     }
 
 

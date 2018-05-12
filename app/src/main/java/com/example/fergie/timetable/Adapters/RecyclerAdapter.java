@@ -3,9 +3,12 @@ package com.example.fergie.timetable.Adapters;
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import com.example.fergie.timetable.MainActivity;
@@ -51,25 +54,44 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         if (list.get(position).getInfo().isEmpty())
         {
             holder.info.setVisibility(View.GONE);
-        }else {
+        } else
+        {
             holder.info.setText(list.get(position).getInfo());
         }
 
         mainActivity = (MainActivity) context;
 
 
-        holder.parentLayout.setOnClickListener(new View.OnClickListener()
+        holder.moreView.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-
-//                list.remove(position);
-//                notifyItemRemoved(position);
-//                notifyItemRangeChanged(position, list.size());
-                editSubject();
-                mainActivity.position = position;
-                mainActivity.edit = 1;
+                PopupMenu popupMenu = new PopupMenu(context, v);
+                popupMenu.inflate(R.menu.item_menu);
+                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener()
+                {
+                    @Override
+                    public boolean onMenuItemClick(MenuItem item)
+                    {
+                        switch (item.getItemId())
+                        {
+                            case R.id.edit_item_id:
+                                editSubject();
+                                mainActivity.position = position;
+                                mainActivity.edit = 1;
+                                return true;
+                            case R.id.delete_item_id:
+                                list.remove(position);
+                                notifyItemRemoved(position);
+                                notifyItemRangeChanged(position, list.size());
+                                return true;
+                            default:
+                                return true;
+                        }
+                    }
+                });
+                popupMenu.show();
 
             }
         });
@@ -90,9 +112,9 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
 
     class ViewHolder extends RecyclerView.ViewHolder
     {
-
         TextView subject, info, startTime, endTime;
         LinearLayout parentLayout;
+        ImageView moreView;
 
         ViewHolder(View itemView)
         {
@@ -103,6 +125,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             startTime = itemView.findViewById(R.id.show_start_time);
             endTime = itemView.findViewById(R.id.show_end_time);
             parentLayout = itemView.findViewById(R.id.recycler_item_id);
+            moreView = itemView.findViewById(R.id.more_id);
         }
     }
 }

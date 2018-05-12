@@ -1,7 +1,9 @@
 package com.example.fergie.timetable.Fragments;
 
 import android.app.AlarmManager;
+import android.app.AlertDialog;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -15,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.TimePicker;
 
 import com.example.fergie.timetable.Communicator;
 import com.example.fergie.timetable.MainActivity;
@@ -23,7 +26,12 @@ import com.example.fergie.timetable.R;
 import com.example.fergie.timetable.Settings;
 import com.example.fergie.timetable.Utils.AlarmReceiver;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
+import java.util.concurrent.TimeUnit;
 
 import static android.content.Context.ALARM_SERVICE;
 
@@ -39,6 +47,9 @@ public class CreateSubjFragment extends Fragment
     FloatingActionButton fab;
     Communicator comm;
     MainActivity mainActivity;
+    public String AM_PM;
+    int hours, minutes;
+    ArrayList<PendingIntent> intentArrayList;
 
     @Nullable
     @Override
@@ -63,8 +74,49 @@ public class CreateSubjFragment extends Fragment
         fab = getActivity().findViewById(R.id.save_subject_fab_id);
         comm = (Communicator) getActivity();
         mainActivity = (MainActivity) getActivity();
+        intentArrayList = new ArrayList<>();
 
         onSaveSubject();
+        showTimePickerDialog();
+
+    }
+
+    private void showTimePickerDialog()
+    {
+
+        startTextView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                TimePickerDialog builder = new TimePickerDialog(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
+                        new TimePickerDialog.OnTimeSetListener()
+                        {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int hour, int min)
+                            {
+
+
+                                if (hour < 12)
+                                {
+                                    AM_PM = "AM";
+                                } else
+                                {
+                                    AM_PM = "PM";
+                                }
+
+                                hours = hour;
+                                minutes = min;
+
+                                startTextView.setText(hour + "");
+                                endTextView.setText(min + "");
+
+
+                            }
+                        }, 2, 8, false);
+                builder.show();
+            }
+        });
 
     }
 
@@ -84,24 +136,34 @@ public class CreateSubjFragment extends Fragment
 
                 SubjectModel subjectModel = new SubjectModel(subject, info, start, end, color);
 
-//                if (Settings.notificationsOn)
-//                {
-//                    Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
-//                    PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), 0, intent,0);
-//
-//                    Calendar calendar = Calendar.getInstance();
-//                    Calendar intervalCalendar = Calendar.getInstance();
-//                    calendar.set(Calendar.DAY_OF_WEEK, Calendar.TUESDAY);
-//                    calendar.set(Calendar.HOUR, 4);
-//                    calendar.set(Calendar.MINUTE, 26);
-//                    long data = calendar.getTimeInMillis();
-//                    intervalCalendar.set(Calendar.MINUTE, 1);
-//
-//                    int inter = Integer.parseInt(subject);
-//
-//                    AlarmManager alarmManager = (AlarmManager) mainActivity.getApplication().getSystemService(ALARM_SERVICE);
-//                    alarmManager.setInexactRepeating(AlarmManager.RTC, data, 10000,pendingIntent);
-//                }
+                if (Settings.notificationsOn == 3)
+                {
+
+                    int id = (int) System.currentTimeMillis();
+                    Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
+                    intent.putExtra("subject", subject);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), id, intent, 0);
+
+                    Calendar calendar = Calendar.getInstance();
+
+                    calendar.set(Calendar.DAY_OF_WEEK, calendar.get(Calendar.DAY_OF_WEEK));
+                    calendar.set(Calendar.HOUR_OF_DAY, hours);
+                    calendar.set(Calendar.MINUTE, minutes);
+//                    if (AM_PM.equals("AM"))
+//                    {
+//                        calendar.set(Calendar.AM_PM, Calendar.AM);
+//                    } else if (AM_PM.equals("PM"))
+//                    {
+//                        calendar.set(Calendar.AM_PM, Calendar.PM);
+//                    }
+                    long data = calendar.getTimeInMillis();
+
+
+                    AlarmManager alarmManager = (AlarmManager) mainActivity.getApplication().getSystemService(ALARM_SERVICE);
+                    alarmManager.setInexactRepeating(AlarmManager.RTC, data, TimeUnit.MINUTES.toMillis(2), pendingIntent);
+
+                    intentArrayList.add(pendingIntent);
+                }
 
                 comm.respond(subjectModel);
                 getActivity().onBackPressed();
