@@ -25,6 +25,7 @@ import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
 import com.example.fergie.timetable.Settings;
 import com.example.fergie.timetable.Utils.AlarmReceiver;
+import com.example.fergie.timetable.Utils.Singleton;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -83,7 +84,6 @@ public class CreateSubjFragment extends Fragment
 
     private void showTimePickerDialog()
     {
-
         startTextView.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -95,8 +95,6 @@ public class CreateSubjFragment extends Fragment
                             @Override
                             public void onTimeSet(TimePicker timePicker, int hour, int min)
                             {
-
-
                                 if (hour < 12)
                                 {
                                     AM_PM = "AM";
@@ -107,11 +105,7 @@ public class CreateSubjFragment extends Fragment
 
                                 hours = hour;
                                 minutes = min;
-
                                 startTextView.setText(hour + "");
-                                endTextView.setText(min + "");
-
-
                             }
                         }, 2, 8, false);
                 builder.show();
@@ -130,19 +124,22 @@ public class CreateSubjFragment extends Fragment
             {
                 String subject = subjectEditText.getText().toString();
                 String info = infoEditText.getText().toString();
-                String start = startTextView.getText().toString();
-                String end = endTextView.getText().toString();
+                String startHour = String.valueOf(hours);
+                String startMinute = String.valueOf(minutes);
+                String end = "12 00";
                 String color = colorTextView.getText().toString();
+                int currentTimeId = (int) System.currentTimeMillis();
 
-                SubjectModel subjectModel = new SubjectModel(subject, info, start, end, color);
+                SubjectModel subjectModel = new SubjectModel(subject, info, startHour, startMinute, end, color, currentTimeId);
 
                 if (Settings.notificationsOn == 3)
                 {
+//                    startHour = Integer.parseInt(list.get(position).getStartHour());
+//                    startMinute = Integer.parseInt(list.get(position).getStartMinute());
 
-                    int id = (int) System.currentTimeMillis();
                     Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
                     intent.putExtra("subject", subject);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), id, intent, 0);
+                    PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), currentTimeId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
                     Calendar calendar = Calendar.getInstance();
 
@@ -158,12 +155,12 @@ public class CreateSubjFragment extends Fragment
 //                    }
                     long data = calendar.getTimeInMillis();
 
+                    AlarmManager alarmManager = (AlarmManager) mainActivity.getApplicationContext().getSystemService(ALARM_SERVICE);
+                    alarmManager.set(AlarmManager.RTC, data, pendingIntent);
 
-                    AlarmManager alarmManager = (AlarmManager) mainActivity.getApplication().getSystemService(ALARM_SERVICE);
-                    alarmManager.setInexactRepeating(AlarmManager.RTC, data, TimeUnit.MINUTES.toMillis(2), pendingIntent);
-
-                    intentArrayList.add(pendingIntent);
+                    Singleton.getInstance().addIntent(pendingIntent);
                 }
+
 
                 comm.respond(subjectModel);
                 getActivity().onBackPressed();

@@ -1,7 +1,11 @@
 package com.example.fergie.timetable.Adapters;
 
+import android.app.AlarmManager;
+import android.app.PendingIntent;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -14,8 +18,16 @@ import android.widget.TextView;
 import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
+import com.example.fergie.timetable.Settings;
+import com.example.fergie.timetable.Utils.AlarmReceiver;
+import com.example.fergie.timetable.Utils.Singleton;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
+
+import static android.content.ContentValues.TAG;
+import static android.content.Context.ALARM_SERVICE;
 
 /**
  * Created by Fergie on 1/18/2018.
@@ -26,6 +38,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     private ArrayList<SubjectModel> list;
     private Context context;
     private MainActivity mainActivity;
+    public ArrayList<PendingIntent> intentArrayList;
 
 
     public RecyclerAdapter(Context context, ArrayList<SubjectModel> list)
@@ -45,11 +58,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
     }
 
     @Override
-    public void onBindViewHolder(ViewHolder holder, final int position)
+    public void onBindViewHolder(final ViewHolder holder, final int position)
     {
-        holder.startTime.setText(list.get(position).getStartTime());
-        holder.endTime.setText(list.get(position).getEndTIme());
-        holder.subject.setText(list.get(position).getSubject());
+        mainActivity = (MainActivity) context;
+        intentArrayList = new ArrayList<>();
+        Log.i("pos", "Recycler: position " + position);
 
         if (list.get(position).getInfo().isEmpty())
         {
@@ -58,8 +71,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         {
             holder.info.setText(list.get(position).getInfo());
         }
-
-        mainActivity = (MainActivity) context;
 
 
         holder.moreView.setOnClickListener(new View.OnClickListener()
@@ -82,6 +93,11 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                                 mainActivity.edit = 1;
                                 return true;
                             case R.id.delete_item_id:
+                                Log.i("pos", "Recycler: position " + position);
+                                AlarmManager mAlarm = (AlarmManager) mainActivity.getSystemService(ALARM_SERVICE);
+                                Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), list.get(position).getIntentId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                mAlarm.cancel(pendingIntent);
                                 list.remove(position);
                                 notifyItemRemoved(position);
                                 notifyItemRangeChanged(position, list.size());
@@ -92,9 +108,15 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                     }
                 });
                 popupMenu.show();
-
             }
         });
+
+
+
+
+        holder.startTime.setText(list.get(position).getStartHour() +  " " +list.get(position).getStartMinute());
+        holder.endTime.setText(list.get(position).getEndTIme());
+        holder.subject.setText(list.get(position).getSubject());
 
     }
 

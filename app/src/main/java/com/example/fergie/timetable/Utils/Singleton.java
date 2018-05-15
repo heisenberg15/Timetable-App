@@ -1,5 +1,7 @@
 package com.example.fergie.timetable.Utils;
 
+import android.app.PendingIntent;
+
 import com.example.fergie.timetable.Models.SubjectModel;
 
 import java.util.ArrayList;
@@ -15,6 +17,7 @@ public class Singleton
     private static ArrayList<SubjectModel> friList;
     private static ArrayList<SubjectModel> satList;
     private static ArrayList<SubjectModel> sunList;
+    private static ArrayList<PendingIntent> intentArrayList;
 
     private Singleton()
     {
@@ -22,7 +25,8 @@ public class Singleton
 
     public static Singleton getInstance()
     {
-        if (uniqueInstance == null) {
+        if (uniqueInstance == null)
+        {
             uniqueInstance = new Singleton();
             monList = new ArrayList<>();
             tueList = new ArrayList<>();
@@ -31,6 +35,8 @@ public class Singleton
             friList = new ArrayList<>();
             satList = new ArrayList<>();
             sunList = new ArrayList<>();
+            intentArrayList = new ArrayList<>();
+
         }
         return uniqueInstance;
     }
@@ -70,6 +76,10 @@ public class Singleton
         sunList.add(subjectModel);
     }
 
+    public void addIntent(PendingIntent pendingIntent)
+    {
+        intentArrayList.add(pendingIntent);
+    }
 
 
     public ArrayList<SubjectModel> getMonList()
@@ -105,5 +115,10 @@ public class Singleton
     public ArrayList<SubjectModel> getSunList()
     {
         return sunList;
+    }
+
+    public ArrayList<PendingIntent> getIntentArrayList()
+    {
+        return intentArrayList;
     }
 }

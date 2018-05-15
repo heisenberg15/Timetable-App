@@ -334,7 +334,6 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
 
 
-
     private void retrySavedSettings()
     {
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
