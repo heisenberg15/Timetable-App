@@ -32,6 +32,7 @@ public class RunOneTime extends Application
         String fridayList = saveSingleton.getString("fridayList", null);
         String saturdayList = saveSingleton.getString("saturdayList", null);
         String sundayList = saveSingleton.getString("sundayList", null);
+        String idList = saveSingleton.getString("idList", null);
 
         if (mondayList != null) {
             ArrayList<SubjectModel> getMondayList = new Gson().fromJson(mondayList, new TypeToken<ArrayList<SubjectModel>>()
@@ -100,6 +101,16 @@ public class RunOneTime extends Application
 
             for (int i = 0; i < getSundayList.size(); i++) {
                 Singleton.getInstance().addSunSubject(getSundayList.get(i));
+            }
+        }
+
+        if (idList != null) {
+            ArrayList<Integer> getIdList = new Gson().fromJson(idList, new TypeToken<ArrayList<Integer>>()
+            {
+            }.getType());
+
+            for (int i = 0; i < getIdList.size(); i++) {
+                Singleton.getInstance().addRequestId(getIdList.get(i));
             }
         }
 

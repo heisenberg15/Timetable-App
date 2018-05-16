@@ -30,6 +30,8 @@ import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.Utils.Singleton;
 import com.google.gson.Gson;
 
+import java.util.ArrayList;
+
 public class MainActivity extends AppCompatActivity implements Communicator
 {
 
@@ -92,9 +94,6 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
         viewPager.setOffscreenPageLimit(7);
 
-
-
-
     }
 
     // save subject lists in shared preferences
@@ -113,6 +112,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
         String fridayList = new Gson().toJson(Singleton.getInstance().getFriList());
         String saturdayList = new Gson().toJson(Singleton.getInstance().getSatList());
         String sundayList = new Gson().toJson(Singleton.getInstance().getSunList());
+        String idList = new Gson().toJson(Singleton.getInstance().getIdList());
+
 
         editor.putString("mondayList", mondayList);
         editor.putString("tuesdayList", tuesdayList);
@@ -121,6 +122,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
         editor.putString("fridayList", fridayList);
         editor.putString("saturdayList", saturdayList);
         editor.putString("sundayList", sundayList);
+        editor.putString("idList", idList);
+
         editor.apply();
     }
 

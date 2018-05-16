@@ -132,19 +132,15 @@ public class CreateSubjFragment extends Fragment
 
                 SubjectModel subjectModel = new SubjectModel(subject, info, startHour, startMinute, end, color, currentTimeId);
 
-                if (Settings.notificationsOn == 3)
-                {
-//                    startHour = Integer.parseInt(list.get(position).getStartHour());
-//                    startMinute = Integer.parseInt(list.get(position).getStartMinute());
-                    Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
-                    intent.putExtra("subject", subject);
-                    PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), currentTimeId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    Calendar calendar = Calendar.getInstance();
+                Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
+                intent.putExtra("subject", subject);
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), currentTimeId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
 
-                    calendar.set(Calendar.DAY_OF_WEEK, calendar.get(Calendar.DAY_OF_WEEK));
-                    calendar.set(Calendar.HOUR_OF_DAY, hours);
-                    calendar.set(Calendar.MINUTE, minutes);
+                Calendar calendar = Calendar.getInstance();
+                calendar.set(Calendar.DAY_OF_WEEK, calendar.get(Calendar.DAY_OF_WEEK));
+                calendar.set(Calendar.HOUR_OF_DAY, hours);
+                calendar.set(Calendar.MINUTE, minutes);
 //                    if (AM_PM.equals("AM"))
 //                    {
 //                        calendar.set(Calendar.AM_PM, Calendar.AM);
@@ -152,21 +148,21 @@ public class CreateSubjFragment extends Fragment
 //                    {
 //                        calendar.set(Calendar.AM_PM, Calendar.PM);
 //                    }
-                    long data = calendar.getTimeInMillis();
+                long data = calendar.getTimeInMillis();
 
-                    AlarmManager alarmManager = (AlarmManager) mainActivity.getApplicationContext().getSystemService(ALARM_SERVICE);
-                    alarmManager.set(AlarmManager.RTC, data, pendingIntent);
+                AlarmManager alarmManager = (AlarmManager) mainActivity.getApplicationContext().getSystemService(ALARM_SERVICE);
+                alarmManager.set(AlarmManager.RTC, data, pendingIntent);
 
-                    if (mainActivity.edit == 1)
-                    {
-                        Bundle getBundle = getArguments();
+                if (mainActivity.edit == 1)
+                {
+                    Bundle getBundle = getArguments();
 
-                        PendingIntent cancelIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), getBundle.getInt("intentId"), intent, PendingIntent.FLAG_UPDATE_CURRENT);
-                        alarmManager.cancel(cancelIntent);
-                    }
+                    PendingIntent cancelIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), getBundle.getInt("intentId"), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    alarmManager.cancel(cancelIntent);
                 }
-
                 Singleton.getInstance().addRequestId(subjectModel.getIntentId());
+
+
                 comm.respond(subjectModel);
                 getActivity().onBackPressed();
             }

@@ -9,6 +9,9 @@ import android.support.v4.app.NotificationCompat;
 
 import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.R;
+import com.example.fergie.timetable.Settings;
+
+import java.util.Set;
 
 import static android.content.Context.NOTIFICATION_SERVICE;
 
@@ -22,18 +25,23 @@ public class AlarmReceiver extends BroadcastReceiver
     @Override
     public void onReceive(Context context, Intent intent)
     {
-        Intent i = new Intent(context, MainActivity.class);
-        PendingIntent notificationIntent = PendingIntent.getActivity(context, 1, i, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        String text = intent.getStringExtra("subject");
+        if (Settings.notificationsOn != 1)
+        {
+            Intent i = new Intent(context, MainActivity.class);
+            PendingIntent notificationIntent = PendingIntent.getActivity(context, 1, i, PendingIntent.FLAG_CANCEL_CURRENT);
 
-        NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id")
-                .setSmallIcon(R.mipmap.ic_launcher)
-                .setContentTitle("Timetable")
-                .setContentIntent(notificationIntent)
-                .setContentText(text);
+            String text = intent.getStringExtra("subject");
 
-        NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
-        manager.notify(1, builder.build());
+            NotificationCompat.Builder builder = new NotificationCompat.Builder(context, "channel_id")
+                    .setSmallIcon(R.mipmap.ic_launcher)
+                    .setContentTitle("Timetable")
+                    .setContentIntent(notificationIntent)
+                    .setContentText(text);
+
+            NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
+            manager.notify(1, builder.build());
+        }
+
     }
 }

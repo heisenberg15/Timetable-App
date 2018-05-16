@@ -189,7 +189,6 @@ public class Settings extends AppCompatActivity
                         {
                             public void onClick(DialogInterface dialog, int which)
                             {
-
                                 Singleton.getInstance().getMonList().clear();
                                 Singleton.getInstance().getTueList().clear();
                                 Singleton.getInstance().getWedList().clear();
@@ -207,6 +206,7 @@ public class Settings extends AppCompatActivity
                                         PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), Singleton.getInstance().getIdList().get(i), intent, PendingIntent.FLAG_UPDATE_CURRENT);
                                         mAlarm.cancel(pendingIntent);
                                     }
+                                    Singleton.getInstance().getIdList().clear();
                                 }
 
                                 Toast.makeText(Settings.this, "All data removed", Toast.LENGTH_SHORT).show();
@@ -283,15 +283,6 @@ public class Settings extends AppCompatActivity
                                 dialog.dismiss();
                             }
                         });
-
-//                        NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext(), "channel_id")
-//                                .setSmallIcon(R.mipmap.ic_launcher)
-//                                .setContentTitle("Timetable")
-//                                .setContentText("Class starts in 5 minutes");
-//
-//                        NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
-//                        assert manager != null;
-//                        manager.notify(1, builder.build());
                     default:
                         return true;
                 }
