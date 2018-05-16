@@ -88,7 +88,8 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         switch (item.getItemId())
                         {
                             case R.id.edit_item_id:
-                                editSubject();
+                                mainActivity.intentId = list.get(position).getIntentId();
+                                mainActivity.showCreateSubjectFragment(list.get(position));
                                 mainActivity.position = position;
                                 mainActivity.edit = 1;
                                 return true;
@@ -111,12 +112,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             }
         });
 
-
-
-
         holder.startTime.setText(list.get(position).getStartHour() +  " " +list.get(position).getStartMinute());
         holder.endTime.setText(list.get(position).getEndTIme());
         holder.subject.setText(list.get(position).getSubject());
+
 
     }
 
@@ -126,11 +125,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         return list.size();
     }
 
-
-    private void editSubject()
-    {
-        mainActivity.showCreateSubjectFragment();
-    }
 
     class ViewHolder extends RecyclerView.ViewHolder
     {

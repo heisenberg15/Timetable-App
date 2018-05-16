@@ -1,8 +1,11 @@
 package com.example.fergie.timetable;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -27,6 +30,7 @@ import com.example.fergie.timetable.Fragments.SunFragment;
 import com.example.fergie.timetable.Fragments.ThuFragment;
 import com.example.fergie.timetable.Fragments.TueFragment;
 import com.example.fergie.timetable.Fragments.WedFragment;
+import com.example.fergie.timetable.Utils.AlarmReceiver;
 import com.example.fergie.timetable.Utils.Singleton;
 
 public class Settings extends AppCompatActivity
@@ -194,8 +198,18 @@ public class Settings extends AppCompatActivity
                                 Singleton.getInstance().getSatList().clear();
                                 Singleton.getInstance().getSunList().clear();
 
-                                Toast.makeText(Settings.this, "All data removed", Toast.LENGTH_SHORT).show();
+                                if (Singleton.getInstance().getIdList().size() != 0)
+                                {
+                                    for (int i = 0; i < Singleton.getInstance().getIdList().size(); i++)
+                                    {
+                                        AlarmManager mAlarm = (AlarmManager) getSystemService(ALARM_SERVICE);
+                                        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), Singleton.getInstance().getIdList().get(i), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                        mAlarm.cancel(pendingIntent);
+                                    }
+                                }
 
+                                Toast.makeText(Settings.this, "All data removed", Toast.LENGTH_SHORT).show();
                             }
                         })
                         .setNegativeButton(R.string.cancel, new DialogInterface.OnClickListener()

@@ -71,15 +71,13 @@ public class MonFragment extends Fragment
             recyclerView.setAdapter(recyclerAdapter);
         } else if (mainActivity.edit == 1) {
             Singleton.getInstance().getMonList().set(mainActivity.position, subjectModel);
-//
+
 //            AlarmManager mAlarm = (AlarmManager) mainActivity.getSystemService(ALARM_SERVICE);
-//            mAlarm.cancel(Singleton.getInstance().getIntentArrayList().get(mainActivity.position));
-//
 //            Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
 //            intent.putExtra("subject", subjectModel.getSubject());
 //
-//            PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), mainActivity.position, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-//
+//            PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), subjectModel.getIntentId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+//            mAlarm.cancel(pendingIntent);
 //            Calendar calendar = Calendar.getInstance();
 //            calendar.set(Calendar.DAY_OF_WEEK, calendar.get(Calendar.DAY_OF_WEEK));
 //            calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(subjectModel.getStartHour()));

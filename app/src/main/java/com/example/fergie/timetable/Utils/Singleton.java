@@ -17,7 +17,7 @@ public class Singleton
     private static ArrayList<SubjectModel> friList;
     private static ArrayList<SubjectModel> satList;
     private static ArrayList<SubjectModel> sunList;
-    private static ArrayList<PendingIntent> intentArrayList;
+    private static ArrayList<Integer> requestIdList;
 
     private Singleton()
     {
@@ -35,7 +35,7 @@ public class Singleton
             friList = new ArrayList<>();
             satList = new ArrayList<>();
             sunList = new ArrayList<>();
-            intentArrayList = new ArrayList<>();
+            requestIdList = new ArrayList<>();
 
         }
         return uniqueInstance;
@@ -76,9 +76,9 @@ public class Singleton
         sunList.add(subjectModel);
     }
 
-    public void addIntent(PendingIntent pendingIntent)
+    public void addRequestId(int id)
     {
-        intentArrayList.add(pendingIntent);
+        requestIdList.add(id);
     }
 
 
@@ -117,8 +117,8 @@ public class Singleton
         return sunList;
     }
 
-    public ArrayList<PendingIntent> getIntentArrayList()
+    public ArrayList<Integer> getIdList()
     {
-        return intentArrayList;
+        return requestIdList;
     }
 }

@@ -136,7 +136,6 @@ public class CreateSubjFragment extends Fragment
                 {
 //                    startHour = Integer.parseInt(list.get(position).getStartHour());
 //                    startMinute = Integer.parseInt(list.get(position).getStartMinute());
-
                     Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
                     intent.putExtra("subject", subject);
                     PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), currentTimeId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -158,10 +157,16 @@ public class CreateSubjFragment extends Fragment
                     AlarmManager alarmManager = (AlarmManager) mainActivity.getApplicationContext().getSystemService(ALARM_SERVICE);
                     alarmManager.set(AlarmManager.RTC, data, pendingIntent);
 
-                    Singleton.getInstance().addIntent(pendingIntent);
+                    if (mainActivity.edit == 1)
+                    {
+                        Bundle getBundle = getArguments();
+
+                        PendingIntent cancelIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), getBundle.getInt("intentId"), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                        alarmManager.cancel(cancelIntent);
+                    }
                 }
 
-
+                Singleton.getInstance().addRequestId(subjectModel.getIntentId());
                 comm.respond(subjectModel);
                 getActivity().onBackPressed();
             }

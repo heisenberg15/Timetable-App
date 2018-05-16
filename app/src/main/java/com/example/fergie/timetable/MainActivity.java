@@ -45,6 +45,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     RunOneTime runOneTime;
     public int edit = 0;
     public int position;
+    public int intentId;
     MyPagerAdapter myPagerAdapter;
     MonFragment monFragment;
     TueFragment tueFragment;
@@ -275,7 +276,19 @@ public class MainActivity extends AppCompatActivity implements Communicator
             @Override
             public void onClick(View v)
             {
-                showCreateSubjectFragment();
+                fab.setVisibility(View.GONE);
+
+                toolbar.setVisibility(View.GONE);
+                tabLayout.setVisibility(View.GONE);
+
+                getSupportFragmentManager()
+                        .beginTransaction()
+                        .replace(R.id.fragment_container_id, createSubjFragment, createSubjFragment.getTag())
+                        .addToBackStack("tag")
+                        .setTransitionStyle(FragmentTransaction.TRANSIT_FRAGMENT_CLOSE)
+                        .commit();
+
+                frameLayout.bringToFront();
             }
         });
     }
@@ -315,12 +328,15 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
     }
 
-    public void showCreateSubjectFragment()
+    public void showCreateSubjectFragment(SubjectModel subjectModel)
     {
         fab.setVisibility(View.GONE);
-
         toolbar.setVisibility(View.GONE);
         tabLayout.setVisibility(View.GONE);
+
+        Bundle bundle = new Bundle();
+        bundle.putInt("intentId", subjectModel.getIntentId());
+        createSubjFragment.setArguments(bundle);
 
         getSupportFragmentManager()
                 .beginTransaction()
