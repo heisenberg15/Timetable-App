@@ -16,6 +16,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 import com.example.fergie.timetable.Adapters.MyPagerAdapter;
 import com.example.fergie.timetable.Fragments.CreateSubjFragment;
@@ -48,6 +49,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     public int edit = 0;
     public int position;
     public int intentId;
+    public int visibleTab = 1;
     MyPagerAdapter myPagerAdapter;
     MonFragment monFragment;
     TueFragment tueFragment;
@@ -87,10 +89,9 @@ public class MainActivity extends AppCompatActivity implements Communicator
 //        fillPages();
 
         initTabs();
-
         fabAnimation();
-
         clickFab();
+        getVisibleTab();
 
         viewPager.setOffscreenPageLimit(7);
 
@@ -351,6 +352,52 @@ public class MainActivity extends AppCompatActivity implements Communicator
         frameLayout.bringToFront();
     }
 
+    private void getVisibleTab()
+    {
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener()
+        {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab)
+            {
+                int pos = tab.getPosition();
+
+                if (pos == 0)
+                {
+                    visibleTab = 2;
+                } else if (pos == 1)
+                {
+                    visibleTab = 3;
+                } else if (pos == 2)
+                {
+                    visibleTab = 4;
+                } else if (pos == 3)
+                {
+                    visibleTab = 5;
+                } else if (pos == 4)
+                {
+                    visibleTab = 6;
+                } else if (pos == 5)
+                {
+                    visibleTab = 7;
+                } else if (pos == 6)
+                {
+                    visibleTab = 1;
+                }
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab)
+            {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab)
+            {
+
+            }
+        });
+    }
 
 
     private void retrySavedSettings()
@@ -358,6 +405,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
         Settings.switchState = settings.getBoolean("switchState", false);
         Settings.notificationsOn = settings.getInt("notificationsOn", 3);
+        Settings.delayTIme = settings.getInt("delayTime", 0);
     }
 
 

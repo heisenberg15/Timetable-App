@@ -30,8 +30,13 @@ import com.example.fergie.timetable.Fragments.SunFragment;
 import com.example.fergie.timetable.Fragments.ThuFragment;
 import com.example.fergie.timetable.Fragments.TueFragment;
 import com.example.fergie.timetable.Fragments.WedFragment;
+import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.Utils.AlarmReceiver;
 import com.example.fergie.timetable.Utils.Singleton;
+
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 public class Settings extends AppCompatActivity
 {
@@ -45,6 +50,7 @@ public class Settings extends AppCompatActivity
     TextView notificationTime;
     private LinearLayout notificationView;
     public static int notificationsOn = 3;
+    public static int delayTIme;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -103,6 +109,7 @@ public class Settings extends AppCompatActivity
         {
             SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
             SharedPreferences.Editor editor = settings.edit();
+            editor.putInt("delayTime", delayTIme);
             editor.putInt("notificationsOn", 3);
             editor.apply();
         }
@@ -171,7 +178,8 @@ public class Settings extends AppCompatActivity
             notificationTime.setText("Instant notifications");
         } else if (notificationsOn == 3)
         {
-            notificationTime.setText("5 minutes before class");
+            String minText = delayTIme + " minutes before class";
+            notificationTime.setText(minText);
         }
     }
 
@@ -203,7 +211,7 @@ public class Settings extends AppCompatActivity
                                     {
                                         AlarmManager mAlarm = (AlarmManager) getSystemService(ALARM_SERVICE);
                                         Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
-                                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), Singleton.getInstance().getIdList().get(i), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), Singleton.getInstance().getIdList().get(i), intent, PendingIntent.FLAG_CANCEL_CURRENT);
                                         mAlarm.cancel(pendingIntent);
                                     }
                                     Singleton.getInstance().getIdList().clear();
@@ -254,6 +262,7 @@ public class Settings extends AppCompatActivity
                     case R.id.instant_id:
                         notificationsOn = 2;
                         notificationTime.setText("Instant notifications");
+//                        delayTIme = 0;
                         return true;
                     case R.id.custom_time_id:
                         notificationsOn = 3;
@@ -269,6 +278,88 @@ public class Settings extends AppCompatActivity
                             public void onValueChange(NumberPicker picker, int oldVal, int newVal)
                             {
                                 notificationTime.setText(newVal + " minutes before class");
+                                delayTIme = newVal;
+                                ArrayList<SubjectModel> subjectList = new ArrayList<>();
+
+                                if (!Singleton.getInstance().getMonList().isEmpty())
+                                {
+                                    for (int i = 0; i < Singleton.getInstance().getMonList().size(); i++)
+                                    {
+                                        subjectList.add(Singleton.getInstance().getMonList().get(i));
+                                    }
+                                }
+
+                                if (!Singleton.getInstance().getThuList().isEmpty())
+                                {
+                                    for (int i = 0; i < Singleton.getInstance().getThuList().size(); i++)
+                                    {
+                                        subjectList.add(Singleton.getInstance().getThuList().get(i));
+                                    }
+                                }
+
+                                if (!Singleton.getInstance().getWedList().isEmpty())
+                                {
+                                    for (int i = 0; i < Singleton.getInstance().getWedList().size(); i++)
+                                    {
+                                        subjectList.add(Singleton.getInstance().getWedList().get(i));
+                                    }
+                                }
+
+                                if (!Singleton.getInstance().getTueList().isEmpty())
+                                {
+                                    for (int i = 0; i < Singleton.getInstance().getTueList().size(); i++)
+                                    {
+                                        subjectList.add(Singleton.getInstance().getTueList().get(i));
+                                    }
+                                }
+
+                                if (!Singleton.getInstance().getFriList().isEmpty())
+                                {
+                                    for (int i = 0; i < Singleton.getInstance().getFriList().size(); i++)
+                                    {
+                                        subjectList.add(Singleton.getInstance().getFriList().get(i));
+                                    }
+                                }
+
+                                if (!Singleton.getInstance().getSatList().isEmpty())
+                                {
+                                    for (int i = 0; i < Singleton.getInstance().getSatList().size(); i++)
+                                    {
+                                        subjectList.add(Singleton.getInstance().getSatList().get(i));
+                                    }
+                                }
+
+                                if (!Singleton.getInstance().getSunList().isEmpty())
+                                {
+                                    for (int i = 0; i < Singleton.getInstance().getSunList().size(); i++)
+                                    {
+                                        subjectList.add(Singleton.getInstance().getSunList().get(i));
+                                    }
+                                }
+
+
+                                if (!subjectList.isEmpty())
+                                {
+
+                                    for (int i = 0; i < subjectList.size(); i++)
+                                    {
+                                        long changedData;
+                                        Calendar calendar = Calendar.getInstance();
+                                        calendar.set(Calendar.DAY_OF_WEEK, calendar.get(Calendar.DAY_OF_WEEK));
+                                        calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(subjectList.get(i).getStartHour()));
+                                        calendar.set(Calendar.MINUTE, Integer.parseInt(subjectList.get(i).getStartMinute()));
+
+                                        changedData = calendar.getTimeInMillis() - TimeUnit.MINUTES.toMillis(newVal);
+                                        Intent intent = new Intent(getApplicationContext(), AlarmReceiver.class);
+                                        intent.putExtra("alarmTime", changedData);
+                                        intent.putExtra("subject", subjectList.get(i).getSubject());
+
+                                        PendingIntent pendingIntent = PendingIntent.getBroadcast(getApplicationContext(), subjectList.get(i).getIntentId(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
+
+                                        AlarmManager alarmManager = (AlarmManager) getApplicationContext().getSystemService(ALARM_SERVICE);
+                                        alarmManager.set(AlarmManager.RTC, changedData, pendingIntent);
+                                    }
+                                }
 
                             }
                         });

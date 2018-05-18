@@ -92,7 +92,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                             case R.id.delete_item_id:
                                 AlarmManager mAlarm = (AlarmManager) mainActivity.getSystemService(ALARM_SERVICE);
                                 Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
-                                PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), list.get(position).getIntentId(), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                                PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), list.get(position).getIntentId(), intent, PendingIntent.FLAG_CANCEL_CURRENT);
                                 mAlarm.cancel(pendingIntent);
 
                                 list.remove(position);

@@ -12,6 +12,7 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.NotificationCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,6 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.ALARM_SERVICE;
 
 /**
@@ -107,7 +109,7 @@ public class CreateSubjFragment extends Fragment
                                 minutes = min;
                                 startTextView.setText(hour + "");
                             }
-                        }, 2, 8, false);
+                        }, 12, 8, false);
                 builder.show();
             }
         });
@@ -129,16 +131,12 @@ public class CreateSubjFragment extends Fragment
                 String end = "12 00";
                 String color = colorTextView.getText().toString();
                 int currentTimeId = (int) System.currentTimeMillis();
+                long data;
 
                 SubjectModel subjectModel = new SubjectModel(subject, info, startHour, startMinute, end, color, currentTimeId);
 
-
-                Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
-                intent.putExtra("subject", subject);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), currentTimeId, intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.DAY_OF_WEEK, calendar.get(Calendar.DAY_OF_WEEK));
+                calendar.set(Calendar.DAY_OF_WEEK, mainActivity.visibleTab);
                 calendar.set(Calendar.HOUR_OF_DAY, hours);
                 calendar.set(Calendar.MINUTE, minutes);
 //                    if (AM_PM.equals("AM"))
@@ -148,7 +146,21 @@ public class CreateSubjFragment extends Fragment
 //                    {
 //                        calendar.set(Calendar.AM_PM, Calendar.PM);
 //                    }
-                long data = calendar.getTimeInMillis();
+//                long data = calendar.getTimeInMillis() - TimeUnit.MINUTES.toMillis(60);
+
+                if (Settings.notificationsOn == 3)
+                {
+                    data = calendar.getTimeInMillis() - TimeUnit.MINUTES.toMillis(Settings.delayTIme);
+                }else {
+                    data = calendar.getTimeInMillis();
+                }
+
+                long testTime = (long)currentTimeId;
+                Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
+                intent.putExtra("subject", subject);
+                intent.putExtra("testTime", calendar.getTimeInMillis());
+
+                PendingIntent pendingIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), currentTimeId, intent, PendingIntent.FLAG_CANCEL_CURRENT);
 
                 AlarmManager alarmManager = (AlarmManager) mainActivity.getApplicationContext().getSystemService(ALARM_SERVICE);
                 alarmManager.set(AlarmManager.RTC, data, pendingIntent);
@@ -157,8 +169,11 @@ public class CreateSubjFragment extends Fragment
                 {
                     Bundle getBundle = getArguments();
 
-                    PendingIntent cancelIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), getBundle.getInt("intentId"), intent, PendingIntent.FLAG_UPDATE_CURRENT);
+                    Log.i("listSize", "list size before: " + Singleton.getInstance().getIdList().size());
+                    PendingIntent cancelIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), getBundle.getInt("intentId"), intent, PendingIntent.FLAG_CANCEL_CURRENT);
                     alarmManager.cancel(cancelIntent);
+                    Singleton.getInstance().getIdList().remove(Integer.valueOf(getBundle.getInt("intentId")));
+                    Log.i("listSize", "list size after: " + Singleton.getInstance().getIdList().size());
                 }
                 Singleton.getInstance().addRequestId(subjectModel.getIntentId());
 
