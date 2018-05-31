@@ -22,6 +22,7 @@ import com.example.fergie.timetable.Utils.AlarmReceiver;
 
 import java.util.ArrayList;
 
+import static android.content.ContentValues.TAG;
 import static android.content.Context.ALARM_SERVICE;
 
 /**
@@ -68,7 +69,6 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             holder.info.setText(list.get(position).getInfo());
         }
 
-
         holder.moreView.setOnClickListener(new View.OnClickListener()
         {
             @Override
@@ -108,9 +108,12 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             }
         });
 
-        String startTime = list.get(position).getStartHour() +  " " +list.get(position).getStartMinute();
+//        boolean isPM = (Integer.parseInt(list.get(position).getStartHour()) >= 12);
+//        Log.i("startTIme", "onBindViewHolder: startTime : " + Integer.parseInt(list.get(position).getStartHour().toString()));
+//        String startTime = String.format("%02d:%02d", (Integer.parseInt(list.get(position).getStartHour()) == 12 || Integer.parseInt(list.get(position).getStartHour()) == 0) ? 12 : Integer.parseInt(list.get(position).getStartHour()) % 12, Integer.parseInt(list.get(position).getStartMinute()), isPM ? "PM" : "AM");
+////        String endTime = String.format("%02d:%02d %s", (Integer.parseInt(list.get(position).getStartHour()) == 12 || Integer.parseInt(list.get(position).getStartHour()) == 0) ? 12 : Integer.parseInt(list.get(position).getStartHour()) % 12, Integer.parseInt(list.get(position).getStartMinute()), isPM ? "PM" : "AM");
 
-        holder.startTimeView.setText(startTime);
+        holder.startTimeView.setText(list.get(position).getStartTime());
         holder.endTimeView.setText(list.get(position).getEndTIme());
         holder.subjectView.setText(list.get(position).getSubject());
     }

@@ -4,14 +4,14 @@ import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
+import android.support.v7.app.ActionBar;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,18 +24,15 @@ import com.example.fergie.timetable.Communicator;
 import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
+import com.example.fergie.timetable.RetainFragment;
 import com.example.fergie.timetable.Settings;
 import com.example.fergie.timetable.Utils.AlarmReceiver;
 import com.example.fergie.timetable.Utils.Singleton;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
-import static android.content.ContentValues.TAG;
 import static android.content.Context.ALARM_SERVICE;
 
 /**
@@ -51,7 +48,9 @@ public class CreateSubjFragment extends Fragment
     Communicator comm;
     MainActivity mainActivity;
     public String AM_PM;
-    int hours, minutes;
+    int startHours, startMins, endHours, endMins;
+    String endTime, startTime;
+    Toolbar toolbar;
     ArrayList<PendingIntent> intentArrayList;
 
     @Nullable
@@ -59,6 +58,20 @@ public class CreateSubjFragment extends Fragment
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
     {
         View fragmentView = inflater.inflate(R.layout.fragment_create_subject, container, false);
+
+//        toolbar = fragmentView.findViewById(R.id.create_subject_toolbar_id);
+//        if (toolbar != null)
+//        {
+//            setHasOptionsMenu(false);
+//            toolbar.inflateMenu(R.menu.frag_menu_items);
+//            Menu menu = toolbar.getMenu();
+//            ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
+//            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+//
+//        }
+
+        RetainFragment rf = MainActivity.findOrCreateRetainFragment(getFragmentManager());
+
 
         return fragmentView;
     }
@@ -80,11 +93,12 @@ public class CreateSubjFragment extends Fragment
         intentArrayList = new ArrayList<>();
 
         onSaveSubject();
-        showTimePickerDialog();
+        showStartTimePicker();
+        showEndTimePicker();
 
     }
 
-    private void showTimePickerDialog()
+    private void showStartTimePicker()
     {
         startTextView.setOnClickListener(new View.OnClickListener()
         {
@@ -105,15 +119,50 @@ public class CreateSubjFragment extends Fragment
                                     AM_PM = "PM";
                                 }
 
-                                hours = hour;
-                                minutes = min;
-                                startTextView.setText(hour + "");
+                                boolean isPM = (hour >= 12);
+                                startHours = hour;
+                                startMins = min;
+                                startTime = String.format("%02d:%02d %s", (hour == 12 || hour == 0) ? 12 : hour % 12, min, isPM ? "PM" : "AM");
+                                startTextView.setText(startTime);
                             }
                         }, 12, 8, false);
                 builder.show();
             }
         });
+    }
 
+    private void showEndTimePicker()
+    {
+        endTextView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                TimePickerDialog builder = new TimePickerDialog(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
+                        new TimePickerDialog.OnTimeSetListener()
+                        {
+                            @Override
+                            public void onTimeSet(TimePicker timePicker, int hour, int min)
+                            {
+                                if (hour < 12)
+                                {
+                                    AM_PM = "AM";
+                                } else
+                                {
+                                    AM_PM = "PM";
+                                }
+
+                                boolean isPM = (hour >= 12);
+                                endHours = hour;
+                                endMins = min;
+                                endTime = String.format("%02d:%02d %s", (hour == 12 || hour == 0) ? 12 : hour % 12, min, isPM ? "PM" : "AM");
+
+                                endTextView.setText(endTime);
+                            }
+                        }, 12, 8, false);
+                builder.show();
+            }
+        });
     }
 
     private void onSaveSubject()
@@ -126,19 +175,20 @@ public class CreateSubjFragment extends Fragment
             {
                 String subject = subjectEditText.getText().toString();
                 String info = infoEditText.getText().toString();
-                String startHour = String.valueOf(hours);
-                String startMinute = String.valueOf(minutes);
-                String end = "12 00";
+                String startHour = String.valueOf(startHours);
+                String startMinute = String.valueOf(startMins);
+                String end = endTime;
+                String start = startTime;
                 String color = colorTextView.getText().toString();
                 int currentTimeId = (int) System.currentTimeMillis();
                 long data;
 
-                SubjectModel subjectModel = new SubjectModel(subject, info, startHour, startMinute, end, color, currentTimeId);
+                SubjectModel subjectModel = new SubjectModel(subject, info, startHour, startMinute, start, end, color, currentTimeId);
 
                 Calendar calendar = Calendar.getInstance();
                 calendar.set(Calendar.DAY_OF_WEEK, mainActivity.visibleTab);
-                calendar.set(Calendar.HOUR_OF_DAY, hours);
-                calendar.set(Calendar.MINUTE, minutes);
+                calendar.set(Calendar.HOUR, startHours);
+                calendar.set(Calendar.MINUTE, startMins);
 //                    if (AM_PM.equals("AM"))
 //                    {
 //                        calendar.set(Calendar.AM_PM, Calendar.AM);
@@ -151,11 +201,11 @@ public class CreateSubjFragment extends Fragment
                 if (Settings.notificationsOn == 3)
                 {
                     data = calendar.getTimeInMillis() - TimeUnit.MINUTES.toMillis(Settings.delayTIme);
-                }else {
+                } else
+                {
                     data = calendar.getTimeInMillis();
                 }
 
-                long testTime = (long)currentTimeId;
                 Intent intent = new Intent(mainActivity.getApplicationContext(), AlarmReceiver.class);
                 intent.putExtra("subject", subject);
                 intent.putExtra("testTime", calendar.getTimeInMillis());

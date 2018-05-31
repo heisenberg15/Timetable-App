@@ -8,6 +8,7 @@ import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.TabLayout;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -86,7 +87,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
         setSupportActionBar(toolbar);
 
-//        fillPages();
+        RetainFragment rf = MainActivity.findOrCreateRetainFragment(getSupportFragmentManager());
+        rf.setObject(getSupportActionBar());
 
         initTabs();
         fabAnimation();
@@ -406,6 +408,20 @@ public class MainActivity extends AppCompatActivity implements Communicator
         Settings.switchState = settings.getBoolean("switchState", false);
         Settings.notificationsOn = settings.getInt("notificationsOn", 3);
         Settings.delayTIme = settings.getInt("delayTime", 0);
+    }
+
+    public static RetainFragment findOrCreateRetainFragment(FragmentManager fm)
+    {
+// Check to see if we have retained the worker fragment.
+        RetainFragment mRetainFragment = (RetainFragment) fm.findFragmentByTag("Retain");
+// If not retained (or first time running), we need to create and add it.
+        if (mRetainFragment == null)
+        {
+            mRetainFragment = new RetainFragment();
+            fm.beginTransaction().add(mRetainFragment,"Retain").
+            commitAllowingStateLoss();
+        }
+        return mRetainFragment;
     }
 
 

@@ -262,7 +262,7 @@ public class Settings extends AppCompatActivity
                     case R.id.instant_id:
                         notificationsOn = 2;
                         notificationTime.setText("Instant notifications");
-//                        delayTIme = 0;
+                        delayTIme = 0;
                         return true;
                     case R.id.custom_time_id:
                         notificationsOn = 3;
@@ -270,8 +270,16 @@ public class Settings extends AppCompatActivity
                         dialog.setContentView(R.layout.dialog_pick_number);
                         dialog.setTitle("Notification time");
                         NumberPicker numberPicker = dialog.findViewById(R.id.number_picker_id);
-                        numberPicker.setMinValue(1);
+                        numberPicker.setMinValue(0);
                         numberPicker.setMaxValue(60);
+                        String[] stringNumList = new String[61];
+                        stringNumList[0] = "Instant notifications";
+                        for (int i = 1; i < stringNumList.length; i++)
+                        {
+                            stringNumList[i] = String.valueOf(i);
+                        }
+
+                        numberPicker.setDisplayedValues(stringNumList);
                         numberPicker.setOnValueChangedListener(new NumberPicker.OnValueChangeListener()
                         {
                             @Override
@@ -280,6 +288,7 @@ public class Settings extends AppCompatActivity
                                 notificationTime.setText(newVal + " minutes before class");
                                 delayTIme = newVal;
                                 ArrayList<SubjectModel> subjectList = new ArrayList<>();
+                                Toast.makeText(Settings.this, "delay: " + delayTIme, Toast.LENGTH_SHORT).show();
 
                                 if (!Singleton.getInstance().getMonList().isEmpty())
                                 {
@@ -340,12 +349,11 @@ public class Settings extends AppCompatActivity
 
                                 if (!subjectList.isEmpty())
                                 {
-
                                     for (int i = 0; i < subjectList.size(); i++)
                                     {
                                         long changedData;
                                         Calendar calendar = Calendar.getInstance();
-                                        calendar.set(Calendar.DAY_OF_WEEK, calendar.get(Calendar.DAY_OF_WEEK));
+                                        calendar.set(Calendar.DAY_OF_WEEK, mainActivity.visibleTab);
                                         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(subjectList.get(i).getStartHour()));
                                         calendar.set(Calendar.MINUTE, Integer.parseInt(subjectList.get(i).getStartMinute()));
 

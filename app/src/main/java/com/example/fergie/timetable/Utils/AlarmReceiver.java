@@ -5,21 +5,14 @@ import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.os.Handler;
 import android.support.v4.app.NotificationCompat;
-import android.util.Log;
 
 import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.R;
 import com.example.fergie.timetable.Settings;
 
-import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.Set;
-import java.util.concurrent.TimeUnit;
 
-import static android.content.ContentValues.TAG;
 import static android.content.Context.NOTIFICATION_SERVICE;
 
 public class AlarmReceiver extends BroadcastReceiver
@@ -74,8 +67,9 @@ public class AlarmReceiver extends BroadcastReceiver
                     NotificationManager manager = (NotificationManager) context.getSystemService(NOTIFICATION_SERVICE);
                     manager.notify(1, builder.build());
                 }
-            }
 
+
+            }
 
 //            else if (Settings.notificationsOn == 3)
 //            {

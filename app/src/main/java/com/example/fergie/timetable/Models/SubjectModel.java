@@ -8,15 +8,16 @@ import java.io.Serializable;
 
 public class SubjectModel implements Serializable
 {
-    private String subject, info, startHour, startMinute, endTIme, color;
+    private String subject, info, startHour, startMinute, startTime, endTIme, color;
     private int intentId;
 
-    public SubjectModel(String subject, String info, String startHour, String startMinute, String endTIme, String color, int intentId)
+    public SubjectModel(String subject, String info, String startHour, String startMinute, String startTime, String endTIme, String color, int intentId)
     {
         this.subject = subject;
         this.info = info;
         this.startHour = startHour;
         this.startMinute = startMinute;
+        this.startTime = startTime;
         this.endTIme = endTIme;
         this.color = color;
         this.intentId = intentId;
@@ -45,6 +46,16 @@ public class SubjectModel implements Serializable
     public String getStartHour()
     {
         return startHour;
+    }
+
+    public String getStartTime()
+    {
+        return startTime;
+    }
+
+    public void setStartTime(String startTime)
+    {
+        this.startTime = startTime;
     }
 
     public void setStartHour(String startHour)
