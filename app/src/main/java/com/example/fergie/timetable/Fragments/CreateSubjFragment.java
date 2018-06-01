@@ -1,5 +1,6 @@
 package com.example.fergie.timetable.Fragments;
 
+import android.annotation.SuppressLint;
 import android.app.AlarmManager;
 import android.app.AlertDialog;
 import android.app.PendingIntent;
@@ -10,7 +11,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.ActionBar;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -43,7 +43,7 @@ public class CreateSubjFragment extends Fragment
 {
 
     EditText subjectEditText, infoEditText;
-    TextView startTextView, endTextView, colorTextView;
+    TextView startTextView, endTextView, colorTextView, startTimeBtn, endTimeBtn;
     FloatingActionButton fab;
     Communicator comm;
     MainActivity mainActivity;
@@ -87,6 +87,8 @@ public class CreateSubjFragment extends Fragment
         startTextView = getActivity().findViewById(R.id.start_time_id);
         endTextView = getActivity().findViewById(R.id.end_time_id);
         colorTextView = getActivity().findViewById(R.id.choose_color_id);
+        startTimeBtn = getActivity().findViewById(R.id.start_time_btn_id);
+        endTimeBtn = getActivity().findViewById(R.id.end_time_btn_id);
         fab = getActivity().findViewById(R.id.save_subject_fab_id);
         comm = (Communicator) getActivity();
         mainActivity = (MainActivity) getActivity();
@@ -96,11 +98,20 @@ public class CreateSubjFragment extends Fragment
         showStartTimePicker();
         showEndTimePicker();
 
+
+        colorTextView.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                mainActivity.chooseColor();
+            }
+        });
     }
 
     private void showStartTimePicker()
     {
-        startTextView.setOnClickListener(new View.OnClickListener()
+        startTimeBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -108,6 +119,7 @@ public class CreateSubjFragment extends Fragment
                 TimePickerDialog builder = new TimePickerDialog(getActivity(), AlertDialog.THEME_DEVICE_DEFAULT_LIGHT,
                         new TimePickerDialog.OnTimeSetListener()
                         {
+                            @SuppressLint("DefaultLocale")
                             @Override
                             public void onTimeSet(TimePicker timePicker, int hour, int min)
                             {
@@ -123,7 +135,7 @@ public class CreateSubjFragment extends Fragment
                                 startHours = hour;
                                 startMins = min;
                                 startTime = String.format("%02d:%02d %s", (hour == 12 || hour == 0) ? 12 : hour % 12, min, isPM ? "PM" : "AM");
-                                startTextView.setText(startTime);
+                                startTimeBtn.setText(startTime);
                             }
                         }, 12, 8, false);
                 builder.show();
@@ -133,7 +145,7 @@ public class CreateSubjFragment extends Fragment
 
     private void showEndTimePicker()
     {
-        endTextView.setOnClickListener(new View.OnClickListener()
+        endTimeBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
@@ -157,7 +169,7 @@ public class CreateSubjFragment extends Fragment
                                 endMins = min;
                                 endTime = String.format("%02d:%02d %s", (hour == 12 || hour == 0) ? 12 : hour % 12, min, isPM ? "PM" : "AM");
 
-                                endTextView.setText(endTime);
+                                endTimeBtn.setText(endTime);
                             }
                         }, 12, 8, false);
                 builder.show();
@@ -179,7 +191,7 @@ public class CreateSubjFragment extends Fragment
                 String startMinute = String.valueOf(startMins);
                 String end = endTime;
                 String start = startTime;
-                String color = colorTextView.getText().toString();
+                String color = String.valueOf(mainActivity.pickedColor);
                 int currentTimeId = (int) System.currentTimeMillis();
                 long data;
 
@@ -233,6 +245,9 @@ public class CreateSubjFragment extends Fragment
             }
         });
     }
+
+
+
 
 
 }

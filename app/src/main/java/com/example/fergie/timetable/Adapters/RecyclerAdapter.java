@@ -4,6 +4,7 @@ import android.app.AlarmManager;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.CardView;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -116,6 +117,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         holder.startTimeView.setText(list.get(position).getStartTime());
         holder.endTimeView.setText(list.get(position).getEndTIme());
         holder.subjectView.setText(list.get(position).getSubject());
+        holder.cardView.setCardBackgroundColor(Integer.parseInt(list.get(position).getColor()));
     }
 
     @Override
@@ -130,6 +132,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
         TextView subjectView, info, startTimeView, endTimeView;
         LinearLayout parentLayout;
         ImageView moreView;
+        CardView cardView;
 
         ViewHolder(View itemView)
         {
@@ -141,6 +144,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
             endTimeView = itemView.findViewById(R.id.show_end_time);
             parentLayout = itemView.findViewById(R.id.recycler_item_id);
             moreView = itemView.findViewById(R.id.more_id);
+            cardView = itemView.findViewById(R.id.card_view_id);
         }
     }
 }

@@ -2,6 +2,7 @@ package com.example.fergie.timetable;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
@@ -17,7 +18,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 import com.example.fergie.timetable.Adapters.MyPagerAdapter;
 import com.example.fergie.timetable.Fragments.CreateSubjFragment;
@@ -31,6 +31,7 @@ import com.example.fergie.timetable.Fragments.WedFragment;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.Utils.Singleton;
 import com.google.gson.Gson;
+import com.savvisingh.colorpickerdialog.ColorPickerDialog;
 
 import java.util.ArrayList;
 
@@ -51,6 +52,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     public int position;
     public int intentId;
     public int visibleTab = 1;
+    public int pickedColor;
     MyPagerAdapter myPagerAdapter;
     MonFragment monFragment;
     TueFragment tueFragment;
@@ -418,12 +420,48 @@ public class MainActivity extends AppCompatActivity implements Communicator
         if (mRetainFragment == null)
         {
             mRetainFragment = new RetainFragment();
-            fm.beginTransaction().add(mRetainFragment,"Retain").
-            commitAllowingStateLoss();
+            fm.beginTransaction().add(mRetainFragment, "Retain").
+                    commitAllowingStateLoss();
         }
         return mRetainFragment;
     }
 
+    public void chooseColor()
+    {
+//        int[] colors = {R.color.colorPrimaryDark, R.color.colorPrimary, R.color.colorAccent};
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.parseColor("#FAFAFA"));
+        colors.add(Color.parseColor("#2ec4b6"));
+        colors.add(Color.parseColor("#ff9f1c"));
+        colors.add(Color.parseColor("#70566d"));
+        colors.add(Color.parseColor("#26c6da"));
+        colors.add(Color.parseColor("#512DA8"));
+        colors.add(Color.parseColor("#e71d36"));
+        colors.add(Color.parseColor("#d6bda1"));
+        colors.add(Color.parseColor("#142737"));
+        ColorPickerDialog dialog = ColorPickerDialog.newInstance(
+                ColorPickerDialog.SELECTION_SINGLE,
+                colors,
+                3, // Number of columns
+                ColorPickerDialog.SIZE_SMALL);
+
+        dialog.show(getFragmentManager(), "some_tag");
+
+        dialog.setOnDialodButtonListener(new ColorPickerDialog.OnDialogButtonListener()
+        {
+            @Override
+            public void onDonePressed(ArrayList<Integer> mSelectedColors)
+            {
+                pickedColor = mSelectedColors.get(0);
+            }
+
+            @Override
+            public void onDismiss()
+            {
+
+            }
+        });
+    }
 
 }
 
