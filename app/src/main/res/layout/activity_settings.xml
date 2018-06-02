@@ -25,136 +25,149 @@
     </android.support.design.widget.AppBarLayout>
 
 
-    <LinearLayout
-        android:id="@+id/notification_container_id"
+    <ScrollView
+        android:id="@+id/settings_scroll_view_id"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:orientation="vertical"
-        android:paddingBottom="10dp"
-        android:paddingEnd="16dp"
-        android:paddingLeft="16dp"
-        android:paddingRight="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="10dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/settings_appbar_id">
+        android:layout_height="match_parent">
 
-        <TextView
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/wrapper_id"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="@string/settings_notifications_title"
-            android:textColor="#323232"
-            android:textSize="@dimen/settings_text_size" />
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/time_before_class_id"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="5 min before class" />
+            <LinearLayout
+                android:id="@+id/notification_container_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="88dp"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:orientation="vertical"
+                android:paddingBottom="10dp"
+                android:paddingEnd="16dp"
+                android:paddingLeft="16dp"
+                android:paddingRight="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="10dp"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/settings_notifications_title"
+                    android:textColor="#323232"
+                    android:textSize="@dimen/settings_text_size" />
 
-    <View
-        android:id="@+id/divider1_id"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:alpha="0.10"
-        android:background="@android:color/black"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/notification_container_id" />
+                <TextView
+                    android:id="@+id/time_before_class_id"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="5 min before class" />
 
-    <TextView
-        android:id="@+id/weekend_days_view_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingBottom="18dp"
-        android:paddingLeft="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="18dp"
-        android:text="@string/weekend_days_settings_title"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/settings_text_size"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider1_id"
-        tools:ignore="RtlSymmetry" />
+            </LinearLayout>
 
-    <Switch
-        android:id="@+id/switcher_id"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:layout_marginRight="10dp"
-        app:layout_constraintBaseline_toBaselineOf="@+id/weekend_days_view_id"
-        app:layout_constraintRight_toRightOf="parent" />
+            <View
+                android:id="@+id/divider1_id"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:alpha="0.10"
+                android:background="@android:color/black"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/notification_container_id" />
+
+            <TextView
+                android:id="@+id/weekend_days_view_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingBottom="18dp"
+                android:paddingLeft="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="18dp"
+                android:text="@string/weekend_days_settings_title"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/settings_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider1_id"
+                tools:ignore="RtlSymmetry" />
+
+            <Switch
+                android:id="@+id/switcher_id"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="10dp"
+                android:layout_marginRight="10dp"
+                app:layout_constraintBaseline_toBaselineOf="@+id/weekend_days_view_id"
+                app:layout_constraintRight_toRightOf="parent" />
 
 
-    <View
-        android:id="@+id/divider2_id"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:alpha="0.10"
-        android:background="@android:color/black"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/weekend_days_view_id" />
+            <View
+                android:id="@+id/divider2_id"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:alpha="0.10"
+                android:background="@android:color/black"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/weekend_days_view_id" />
 
-    <TextView
-        android:id="@+id/reset_table_view_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingBottom="18dp"
-        android:paddingLeft="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="18dp"
-        android:text="@string/reset_timetable_settings_title"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/settings_text_size"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/divider2_id"
-        tools:ignore="RtlSymmetry" />
+            <TextView
+                android:id="@+id/reset_table_view_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingBottom="18dp"
+                android:paddingLeft="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="18dp"
+                android:text="@string/reset_timetable_settings_title"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/settings_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/divider2_id"
+                tools:ignore="RtlSymmetry" />
 
-    <View
-        android:id="@+id/divider3_id"
-        android:layout_width="0dp"
-        android:layout_height="1dp"
-        android:alpha="0.10"
-        android:background="@android:color/black"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/reset_table_view_id" />
+            <View
+                android:id="@+id/divider3_id"
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:alpha="0.10"
+                android:background="@android:color/black"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/reset_table_view_id" />
 
-    <TextView
-        android:id="@+id/rate_app_view_id"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        android:clickable="true"
-        android:focusable="true"
-        android:paddingBottom="18dp"
-        android:paddingLeft="16dp"
-        android:paddingStart="16dp"
-        android:paddingTop="18dp"
-        android:text="@string/rate_app_settings_title"
-        android:textColor="@android:color/black"
-        android:textSize="@dimen/settings_text_size"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider3_id"
-        tools:ignore="RtlSymmetry" />
+            <TextView
+                android:id="@+id/rate_app_view_id"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="?attr/selectableItemBackground"
+                android:clickable="true"
+                android:focusable="true"
+                android:paddingBottom="18dp"
+                android:paddingLeft="16dp"
+                android:paddingStart="16dp"
+                android:paddingTop="18dp"
+                android:text="@string/rate_app_settings_title"
+                android:textColor="@android:color/black"
+                android:textSize="@dimen/settings_text_size"
+                app:layout_constraintLeft_toLeftOf="parent"
+                app:layout_constraintRight_toRightOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/divider3_id"
+                tools:ignore="RtlSymmetry" />
+
+        </android.support.constraint.ConstraintLayout>
+    </ScrollView>
 
 
 </android.support.constraint.ConstraintLayout>
