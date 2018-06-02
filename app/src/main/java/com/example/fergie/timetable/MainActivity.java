@@ -14,6 +14,7 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -105,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     @Override
     protected void onStop()
     {
-        super.onStop();
+        super.onStop();;
 
         SharedPreferences saveSingleton = getSharedPreferences("saveSingleton", MODE_PRIVATE);
         SharedPreferences.Editor editor = saveSingleton.edit();
@@ -346,6 +347,19 @@ public class MainActivity extends AppCompatActivity implements Communicator
 
         Bundle bundle = new Bundle();
         bundle.putInt("intentId", subjectModel.getIntentId());
+
+        if (edit == 1)
+        {
+            bundle.putString("subject", subjectModel.getSubject());
+            bundle.putString("info", subjectModel.getInfo());
+            bundle.putString("startTime", subjectModel.getStartTime());
+            bundle.putString("endTime", subjectModel.getEndTIme());
+            Log.i("check", "showCreateSubjectFragment: " + subjectModel.getStartTime() + subjectModel.getEndTIme());
+            bundle.putString("color", subjectModel.getColor());
+            pickedColor = Integer.parseInt(subjectModel.getColor());
+            bundle.putInt("startHour", Integer.parseInt(subjectModel.getStartHour()));
+            bundle.putInt("startMinute", Integer.parseInt(subjectModel.getStartMinute()));
+        }
         createSubjFragment.setArguments(bundle);
 
         getSupportFragmentManager()

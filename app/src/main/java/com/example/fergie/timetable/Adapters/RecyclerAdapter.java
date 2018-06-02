@@ -85,10 +85,10 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         switch (item.getItemId())
                         {
                             case R.id.edit_item_id:
+                                mainActivity.edit = 1;
                                 mainActivity.intentId = list.get(position).getIntentId();
                                 mainActivity.showCreateSubjectFragment(list.get(position));
                                 mainActivity.position = position;
-                                mainActivity.edit = 1;
                                 return true;
                             case R.id.delete_item_id:
                                 AlarmManager mAlarm = (AlarmManager) mainActivity.getSystemService(ALARM_SERVICE);

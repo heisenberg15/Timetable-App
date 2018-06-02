@@ -105,7 +105,14 @@ public class CreateSubjFragment extends Fragment
         });
     }
 
-//    @Override
+    @Override
+    public void onStart()
+    {
+        super.onStart();
+        getValues();
+    }
+
+    //    @Override
 //    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
 //    {
 //        super.onCreateOptionsMenu(menu, inflater);
@@ -247,11 +254,11 @@ public class CreateSubjFragment extends Fragment
                 {
                     Bundle getBundle = getArguments();
 
-                    Log.i("listSize", "list size before: " + Singleton.getInstance().getIdList().size());
+//                    Log.i("listSize", "list size before: " + Singleton.getInstance().getIdList().size());
                     PendingIntent cancelIntent = PendingIntent.getBroadcast(mainActivity.getApplicationContext(), getBundle.getInt("intentId"), intent, PendingIntent.FLAG_CANCEL_CURRENT);
                     alarmManager.cancel(cancelIntent);
                     Singleton.getInstance().getIdList().remove(Integer.valueOf(getBundle.getInt("intentId")));
-                    Log.i("listSize", "list size after: " + Singleton.getInstance().getIdList().size());
+//                    Log.i("listSize", "list size after: " + Singleton.getInstance().getIdList().size());
                 }
                 Singleton.getInstance().addRequestId(subjectModel.getIntentId());
 
@@ -263,7 +270,28 @@ public class CreateSubjFragment extends Fragment
     }
 
 
-
+    private void getValues()
+    {
+        if (mainActivity.edit == 1)
+        {
+            Bundle bundle = getArguments();
+            assert bundle != null;
+            startTime = bundle.getString("startTime");
+            endTime = bundle.getString("endTime");
+            subjectEditText.setText(String.valueOf(bundle.getString("subject")), TextView.BufferType.EDITABLE);
+            infoEditText.setText(String.valueOf(bundle.getString("info")), TextView.BufferType.EDITABLE);
+            Log.i("check times", "getValues : " + startTime + endTime);
+//            mainActivity.pickedColor =Integer.parseInt(bundle.getString("color"));
+            startHours = bundle.getInt("startHour");
+            startMins = bundle.getInt("startMinute");
+            startTimeBtn.setText(startTime);
+            endTimeBtn.setText(endTime);
+        } else if (mainActivity.edit == 0)
+        {
+            subjectEditText.setText("");
+            infoEditText.setText("");
+        }
+    }
 
 
 }
