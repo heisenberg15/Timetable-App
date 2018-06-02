@@ -159,6 +159,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
         edit = savedInstanceState.getInt("saveEdit");
     }
 
+
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {

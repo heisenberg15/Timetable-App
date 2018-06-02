@@ -11,9 +11,13 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
@@ -62,20 +66,12 @@ public class CreateSubjFragment extends Fragment
 //        toolbar = fragmentView.findViewById(R.id.create_subject_toolbar_id);
 //        if (toolbar != null)
 //        {
-//            setHasOptionsMenu(false);
-//            toolbar.inflateMenu(R.menu.frag_menu_items);
-//            Menu menu = toolbar.getMenu();
 //            ((AppCompatActivity)getActivity()).setSupportActionBar(toolbar);
 //            ((AppCompatActivity) getActivity()).getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 //
 //        }
-
-        RetainFragment rf = MainActivity.findOrCreateRetainFragment(getFragmentManager());
-
-
         return fragmentView;
     }
-
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState)
@@ -108,6 +104,26 @@ public class CreateSubjFragment extends Fragment
             }
         });
     }
+
+//    @Override
+//    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater)
+//    {
+//        super.onCreateOptionsMenu(menu, inflater);
+//        menu.clear();
+//
+//    }
+
+//    @Override
+//    public boolean onOptionsItemSelected(MenuItem item)
+//    {
+//        switch (item.getItemId()){
+//            case android.R.id.home:
+//                getActivity().onBackPressed();
+//                break;
+//        }
+//        return super.onOptionsItemSelected(item);
+//
+//    }
 
     private void showStartTimePicker()
     {
