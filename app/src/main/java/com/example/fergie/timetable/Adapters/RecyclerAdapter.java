@@ -86,6 +86,7 @@ public class RecyclerAdapter extends RecyclerView.Adapter<RecyclerAdapter.ViewHo
                         {
                             case R.id.edit_item_id:
                                 mainActivity.edit = 1;
+                                mainActivity.newSubject = 0;
                                 mainActivity.intentId = list.get(position).getIntentId();
                                 mainActivity.showCreateSubjectFragment(list.get(position));
                                 mainActivity.position = position;

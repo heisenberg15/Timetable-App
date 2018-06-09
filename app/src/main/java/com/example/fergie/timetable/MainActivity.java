@@ -53,7 +53,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     public int position;
     public int intentId;
     public int visibleTab = 1;
-    public int pickedColor;
+    public int newSubject = 0;
     MyPagerAdapter myPagerAdapter;
     MonFragment monFragment;
     TueFragment tueFragment;
@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
     @Override
     protected void onStop()
     {
-        super.onStop();;
+        super.onStop();
 
         SharedPreferences saveSingleton = getSharedPreferences("saveSingleton", MODE_PRIVATE);
         SharedPreferences.Editor editor = saveSingleton.edit();
@@ -190,6 +190,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
         tabLayout.setVisibility(View.VISIBLE);
         fab.setVisibility(View.VISIBLE);
         edit = 0;
+        newSubject = 0;
     }
 
     // Fill pagerAdapter with Fragments and Titles
@@ -279,6 +280,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
         });
     }
 
+
     // create new subject
     private void clickFab()
     {
@@ -292,6 +294,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
                 toolbar.setVisibility(View.GONE);
                 tabLayout.setVisibility(View.GONE);
 
+                newSubject = 1;
                 getSupportFragmentManager()
                         .beginTransaction()
                         .replace(R.id.fragment_container_id, createSubjFragment, createSubjFragment.getTag())
@@ -354,9 +357,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
             bundle.putString("info", subjectModel.getInfo());
             bundle.putString("startTime", subjectModel.getStartTime());
             bundle.putString("endTime", subjectModel.getEndTIme());
-            Log.i("check", "showCreateSubjectFragment: " + subjectModel.getStartTime() + subjectModel.getEndTIme());
-            bundle.putString("color", subjectModel.getColor());
-            pickedColor = Integer.parseInt(subjectModel.getColor());
+            bundle.putInt("color", Integer.parseInt(subjectModel.getColor()));
             bundle.putInt("startHour", Integer.parseInt(subjectModel.getStartHour()));
             bundle.putInt("startMinute", Integer.parseInt(subjectModel.getStartMinute()));
         }
@@ -442,42 +443,7 @@ public class MainActivity extends AppCompatActivity implements Communicator
         return mRetainFragment;
     }
 
-    public void chooseColor()
-    {
-//        int[] colors = {R.color.colorPrimaryDark, R.color.colorPrimary, R.color.colorAccent};
-        ArrayList<Integer> colors = new ArrayList<>();
-        colors.add(Color.parseColor("#FAFAFA"));
-        colors.add(Color.parseColor("#2ec4b6"));
-        colors.add(Color.parseColor("#ff9f1c"));
-        colors.add(Color.parseColor("#70566d"));
-        colors.add(Color.parseColor("#26c6da"));
-        colors.add(Color.parseColor("#512DA8"));
-        colors.add(Color.parseColor("#e71d36"));
-        colors.add(Color.parseColor("#d6bda1"));
-        colors.add(Color.parseColor("#142737"));
-        ColorPickerDialog dialog = ColorPickerDialog.newInstance(
-                ColorPickerDialog.SELECTION_SINGLE,
-                colors,
-                3, // Number of columns
-                ColorPickerDialog.SIZE_SMALL);
 
-        dialog.show(getFragmentManager(), "some_tag");
-
-        dialog.setOnDialodButtonListener(new ColorPickerDialog.OnDialogButtonListener()
-        {
-            @Override
-            public void onDonePressed(ArrayList<Integer> mSelectedColors)
-            {
-                pickedColor = mSelectedColors.get(0);
-            }
-
-            @Override
-            public void onDismiss()
-            {
-
-            }
-        });
-    }
 
 }
 

@@ -6,20 +6,18 @@ import android.app.AlertDialog;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.TimePicker;
@@ -28,10 +26,10 @@ import com.example.fergie.timetable.Communicator;
 import com.example.fergie.timetable.MainActivity;
 import com.example.fergie.timetable.Models.SubjectModel;
 import com.example.fergie.timetable.R;
-import com.example.fergie.timetable.RetainFragment;
 import com.example.fergie.timetable.Settings;
 import com.example.fergie.timetable.Utils.AlarmReceiver;
 import com.example.fergie.timetable.Utils.Singleton;
+import com.savvisingh.colorpickerdialog.ColorPickerDialog;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -47,14 +45,17 @@ public class CreateSubjFragment extends Fragment
 {
 
     EditText subjectEditText, infoEditText;
-    TextView startTextView, endTextView, colorTextView, startTimeBtn, endTimeBtn;
+    TextView startTextView, endTextView, startTimeBtn, endTimeBtn;
+    public Button colorBtn;
     FloatingActionButton fab;
     Communicator comm;
     MainActivity mainActivity;
     public String AM_PM;
     int startHours, startMins, endHours, endMins;
     String endTime, startTime;
+    private int pickedColor;
     Toolbar toolbar;
+    ColorPickerDialog dialog;
     ArrayList<PendingIntent> intentArrayList;
 
     @Nullable
@@ -82,7 +83,7 @@ public class CreateSubjFragment extends Fragment
         infoEditText = getActivity().findViewById(R.id.info_edit_text_id);
         startTextView = getActivity().findViewById(R.id.start_time_id);
         endTextView = getActivity().findViewById(R.id.end_time_id);
-        colorTextView = getActivity().findViewById(R.id.choose_color_id);
+        colorBtn = getActivity().findViewById(R.id.choose_color_id);
         startTimeBtn = getActivity().findViewById(R.id.start_time_btn_id);
         endTimeBtn = getActivity().findViewById(R.id.end_time_btn_id);
         fab = getActivity().findViewById(R.id.save_subject_fab_id);
@@ -90,17 +91,39 @@ public class CreateSubjFragment extends Fragment
         mainActivity = (MainActivity) getActivity();
         intentArrayList = new ArrayList<>();
 
+
+        if (savedInstanceState != null)
+        {
+            mainActivity.edit = savedInstanceState.getInt("edit");
+        }
+
+        if (savedInstanceState != null && mainActivity.edit == 1)
+        {
+            startHours = savedInstanceState.getInt("startHours");
+            startMins = savedInstanceState.getInt("startMins");
+            startTime = savedInstanceState.getString("startTime");
+            endHours = savedInstanceState.getInt("endHours");
+            endMins = savedInstanceState.getInt("endMins");
+            endTime = savedInstanceState.getString("endTime");
+            pickedColor = savedInstanceState.getInt("color");
+
+            startTimeBtn.setText(startTime);
+            endTimeBtn.setText(endTime);
+            colorBtn.setBackgroundColor(pickedColor);
+
+        }
+
         onSaveSubject();
         showStartTimePicker();
         showEndTimePicker();
 
 
-        colorTextView.setOnClickListener(new View.OnClickListener()
+        colorBtn.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-                mainActivity.chooseColor();
+                chooseColor();
             }
         });
     }
@@ -110,6 +133,33 @@ public class CreateSubjFragment extends Fragment
     {
         super.onStart();
         getValues();
+    }
+
+    @Override
+    public void onPause()
+    {
+        super.onPause();
+        if (dialog != null)
+        {
+            dialog.dismiss();
+        }
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState)
+    {
+        super.onSaveInstanceState(outState);
+        if (mainActivity.edit == 1)
+        {
+            outState.putInt("startHours", startHours);
+            outState.putInt("startMins", startMins);
+            outState.putString("startTime", startTime);
+            outState.putInt("endHours", endHours);
+            outState.putInt("endMins", endMins);
+            outState.putString("endTime", endTime);
+            outState.putInt("color", pickedColor);
+            outState.putInt("edit", mainActivity.edit);
+        }
     }
 
     //    @Override
@@ -153,7 +203,6 @@ public class CreateSubjFragment extends Fragment
                                 {
                                     AM_PM = "PM";
                                 }
-
                                 boolean isPM = (hour >= 12);
                                 startHours = hour;
                                 startMins = min;
@@ -186,7 +235,6 @@ public class CreateSubjFragment extends Fragment
                                 {
                                     AM_PM = "PM";
                                 }
-
                                 boolean isPM = (hour >= 12);
                                 endHours = hour;
                                 endMins = min;
@@ -214,7 +262,7 @@ public class CreateSubjFragment extends Fragment
                 String startMinute = String.valueOf(startMins);
                 String end = endTime;
                 String start = startTime;
-                String color = String.valueOf(mainActivity.pickedColor);
+                String color = String.valueOf(pickedColor);
                 int currentTimeId = (int) System.currentTimeMillis();
                 long data;
 
@@ -262,13 +310,54 @@ public class CreateSubjFragment extends Fragment
                 }
                 Singleton.getInstance().addRequestId(subjectModel.getIntentId());
 
-
+                mainActivity.newSubject = 0;
                 comm.respond(subjectModel);
                 getActivity().onBackPressed();
             }
         });
     }
 
+    public void chooseColor()
+    {
+//        int[] colors = {R.color.colorPrimaryDark, R.color.colorPrimary, R.color.colorAccent};
+        ArrayList<Integer> colors = new ArrayList<>();
+        colors.add(Color.parseColor("#FAFAFA"));
+        colors.add(Color.parseColor("#2ec4b6"));
+        colors.add(Color.parseColor("#ff9f1c"));
+        colors.add(Color.parseColor("#70566d"));
+        colors.add(Color.parseColor("#26c6da"));
+        colors.add(Color.parseColor("#512DA8"));
+        colors.add(Color.parseColor("#e71d36"));
+        colors.add(Color.parseColor("#d6bda1"));
+        colors.add(Color.parseColor("#142737"));
+        dialog = ColorPickerDialog.newInstance(
+                ColorPickerDialog.SELECTION_SINGLE,
+                colors,
+                3, // Number of columns
+                ColorPickerDialog.SIZE_SMALL);
+
+        dialog.show(getActivity().getFragmentManager(), "some_tag");
+
+
+        dialog.setOnDialodButtonListener(new ColorPickerDialog.OnDialogButtonListener()
+        {
+            @Override
+            public void onDonePressed(ArrayList<Integer> mSelectedColors)
+            {
+                if (!mSelectedColors.isEmpty())
+                {
+                    pickedColor = mSelectedColors.get(0);
+                    colorBtn.setBackgroundColor(pickedColor);
+                }
+            }
+
+            @Override
+            public void onDismiss()
+            {
+
+            }
+        });
+    }
 
     private void getValues()
     {
@@ -280,13 +369,15 @@ public class CreateSubjFragment extends Fragment
             endTime = bundle.getString("endTime");
             subjectEditText.setText(String.valueOf(bundle.getString("subject")), TextView.BufferType.EDITABLE);
             infoEditText.setText(String.valueOf(bundle.getString("info")), TextView.BufferType.EDITABLE);
-            Log.i("check times", "getValues : " + startTime + endTime);
-//            mainActivity.pickedColor =Integer.parseInt(bundle.getString("color"));
             startHours = bundle.getInt("startHour");
             startMins = bundle.getInt("startMinute");
+            pickedColor = bundle.getInt("color");
             startTimeBtn.setText(startTime);
             endTimeBtn.setText(endTime);
-        } else if (mainActivity.edit == 0)
+            colorBtn.setBackgroundColor(pickedColor);
+        }
+
+        if (mainActivity.newSubject == 1)
         {
             subjectEditText.setText("");
             infoEditText.setText("");
