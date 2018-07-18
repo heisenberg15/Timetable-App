@@ -353,7 +353,7 @@ public class Settings extends AppCompatActivity
                                     {
                                         long changedData;
                                         Calendar calendar = Calendar.getInstance();
-                                        calendar.set(Calendar.DAY_OF_WEEK, mainActivity.visibleTab);
+//                                        calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
                                         calendar.set(Calendar.HOUR_OF_DAY, Integer.parseInt(subjectList.get(i).getStartHour()));
                                         calendar.set(Calendar.MINUTE, Integer.parseInt(subjectList.get(i).getStartMinute()));
 

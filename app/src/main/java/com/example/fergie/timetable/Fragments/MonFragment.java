@@ -34,10 +34,8 @@ import static android.content.Context.MODE_PRIVATE;
 
 public class MonFragment extends Fragment
 {
-
     RecyclerView recyclerView;
     MainActivity mainActivity;
-
 
     @Nullable
     @Override

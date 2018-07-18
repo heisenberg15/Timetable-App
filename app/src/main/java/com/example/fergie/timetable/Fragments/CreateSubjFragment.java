@@ -269,7 +269,7 @@ public class CreateSubjFragment extends Fragment
                 SubjectModel subjectModel = new SubjectModel(subject, info, startHour, startMinute, start, end, color, currentTimeId);
 
                 Calendar calendar = Calendar.getInstance();
-                calendar.set(Calendar.DAY_OF_WEEK, mainActivity.visibleTab);
+//                calendar.set(Calendar.DAY_OF_WEEK, Calendar.SUNDAY);
                 calendar.set(Calendar.HOUR, startHours);
                 calendar.set(Calendar.MINUTE, startMins);
 //                    if (AM_PM.equals("AM"))

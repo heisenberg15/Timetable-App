@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.FloatingActionButton;
@@ -19,6 +20,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.FrameLayout;
+import android.widget.TableLayout;
 
 import com.example.fergie.timetable.Adapters.MyPagerAdapter;
 import com.example.fergie.timetable.Fragments.CreateSubjFragment;
@@ -35,6 +37,7 @@ import com.google.gson.Gson;
 import com.savvisingh.colorpickerdialog.ColorPickerDialog;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 
 public class MainActivity extends AppCompatActivity implements Communicator
 {
@@ -161,7 +164,6 @@ public class MainActivity extends AppCompatActivity implements Communicator
     }
 
 
-
     @Override
     public boolean onCreateOptionsMenu(Menu menu)
     {
@@ -237,6 +239,8 @@ public class MainActivity extends AppCompatActivity implements Communicator
             myPagerAdapter.addFragment(friFragment, "Fri");
         }
         viewPager.setAdapter(myPagerAdapter);
+
+        setCurrentTab();
     }
 
     private void initTabs()
@@ -420,11 +424,142 @@ public class MainActivity extends AppCompatActivity implements Communicator
         });
     }
 
+    private void setCurrentTab()
+    {
+        Calendar calendar = Calendar.getInstance();
+        int day = calendar.get(Calendar.DAY_OF_WEEK);
+        TabLayout.Tab tab;
+
+        switch (day)
+        {
+            case Calendar.MONDAY:
+                tab = tabLayout.getTabAt(0);
+                final TabLayout.Tab finalTab = tab;
+                new Handler().postDelayed(
+                        new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                finalTab.select();
+                            }
+                        }, 100);
+                break;
+            case Calendar.TUESDAY:
+                tab = tabLayout.getTabAt(1);
+                final TabLayout.Tab finalTab1 = tab;
+                new Handler().postDelayed(
+                        new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                finalTab1.select();
+                            }
+                        }, 100);
+                break;
+            case Calendar.WEDNESDAY:
+                tab = tabLayout.getTabAt(2);
+                final TabLayout.Tab finalTab2 = tab;
+                new Handler().postDelayed(
+                        new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                finalTab2.select();
+                            }
+                        }, 100);
+                break;
+            case Calendar.THURSDAY:
+                tab = tabLayout.getTabAt(3);
+
+                final TabLayout.Tab finalTab3 = tab;
+                new Handler().postDelayed(
+                        new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                finalTab3.select();
+                            }
+                        }, 100);
+                break;
+            case Calendar.FRIDAY:
+                tab = tabLayout.getTabAt(4);
+                final TabLayout.Tab finalTab4 = tab;
+                new Handler().postDelayed(
+                        new Runnable()
+                        {
+                            @Override
+                            public void run()
+                            {
+                                finalTab4.select();
+                            }
+                        }, 100);
+                break;
+            case Calendar.SATURDAY:
+                tab = tabLayout.getTabAt(5);
+                final TabLayout.Tab finalTab5 = tab;
+                if (Settings.switchState)
+                {
+                    new Handler().postDelayed(
+                            new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    finalTab5.select();
+                                }
+                            }, 100);
+                } else
+                {
+                    new Handler().postDelayed(
+                            new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    tabLayout.getTabAt(0).select();
+                                }
+                            }, 100);
+                }
+                break;
+            case Calendar.SUNDAY:
+                tab = tabLayout.getTabAt(6);
+                final TabLayout.Tab finalTab6 = tab;
+                if (Settings.switchState)
+                {
+                    new Handler().postDelayed(
+                            new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    finalTab6.select();
+                                }
+                            }, 100);
+                }else {
+                    new Handler().postDelayed(
+                            new Runnable()
+                            {
+                                @Override
+                                public void run()
+                                {
+                                    tabLayout.getTabAt(0).select();
+                                }
+                            }, 100);
+                }
+            default:
+                break;
+        }
+    }
+
 
     private void retrySavedSettings()
     {
         SharedPreferences settings = getSharedPreferences("settings", MODE_PRIVATE);
-        Settings.switchState = settings.getBoolean("switchState", false);
+        Settings.switchState = settings.getBoolean("switchState", true);
         Settings.notificationsOn = settings.getInt("notificationsOn", 3);
         Settings.delayTIme = settings.getInt("delayTime", 0);
     }
@@ -442,7 +577,6 @@ public class MainActivity extends AppCompatActivity implements Communicator
         }
         return mRetainFragment;
     }
-
 
 
 }
